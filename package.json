@@ -9,19 +9,30 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.12.12",
+    "@prisma/client": "^6.5.0",
+    "@tanstack/react-query": "^5.71.1",
+    "@types/cors": "^2.8.17",
+    "cors": "^2.8.5",
+    "login": "^0.8.0",
+    "next": "15.2.4",
+    "openai": "^4.91.1",
+    "prisma": "^6.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.2.4"
+    "react-hot-toast": "^2.5.2",
+    "react-loading-skeleton": "^3.5.0",
+    "stripe": "^17.7.0"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
-    "@eslint/eslintrc": "^3"
+    "tailwindcss": "^4",
+    "typescript": "^5"
   }
 }
