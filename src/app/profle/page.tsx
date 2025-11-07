@@ -18,7 +18,8 @@ const Profile = () => {
 
   const fetchSubcriptionStatus = async () => {
     try {
-      const response = await fetch("api/subscription-status");
+      if (!user?.id) return null;
+      const response = await fetch(`/api/check-subscription?userId=${user.id}`);
       const data = await response.json();
       return data;
     } catch (error) {
@@ -26,25 +27,27 @@ const Profile = () => {
     }
   };
 
-  const updateSubscriptionStatus = async () => {
+  const updateSubscriptionStatus = async (newPlan: string) => {
     try {
-      const response = await fetch("api/change-plan", {
+      const response = await fetch(`/api/change-plan`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ newPlan: selectedOption }),
+        body: JSON.stringify({ newPlan }),
       });
       const data = await response.json();
-      return data.message; // Assuming the backend response has a message key
+      return data; // expecting { message }
     } catch (error) {
       console.log("Error updating subscription status", error);
+      throw error;
     }
   };
 
   const { data } = useQuery({
-    queryKey: ["subscription"],
+    queryKey: ["subscription", user?.id],
     queryFn: fetchSubcriptionStatus,
+    enabled: !!user?.id,
     staleTime: 5 * 60 * 1000,
   });
 
@@ -72,7 +75,7 @@ const Profile = () => {
   };
 
   const currentPlan = MealPlans.find(
-    (plan) => plan.interval === data?.subscription?.subscrptionTier
+    (plan) => plan.interval === data?.subscription?.tier
   );
 
   const cancelSubscription = async () => {
@@ -148,19 +151,29 @@ const Profile = () => {
 
           <div className="bg-white p-6 rounded-xl shadow-md w-full lg:w-2/3">
             <h2 className="text-2xl font-semibold mb-4">Subscription Details</h2>
-            <div className="flex flex-col gap-2 shadow-xl border-red-500 border rounded-lg py-3 px-2">
+            <div className="flex flex-col gap-2 rounded-lg py-3 px-4 bg-gray-50">
               {currentPlan ? (
                 <>
                   <h1 className="text-xl text-emerald-700 font-bold">Current Plan</h1>
-                  <span>
-                    <strong>Plan</strong>: {currentPlan?.interval} Plan
-                  </span>
-                  <span>
-                    <strong>Amount</strong>: ${currentPlan?.amount} USD
-                  </span>
-                  <span>
-                    <strong>Status</strong>: {data?.subscription?.subcriptionIsActive ? "ACTIVE" : "INACTIVE"}
-                  </span>
+                  <div className="flex flex-col gap-1">
+                    <span>
+                      <strong>Plan</strong>: {currentPlan?.interval} Plan
+                    </span>
+                    <span>
+                      <strong>Amount</strong>: ${currentPlan?.amount} USD
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <strong>Status</strong>:
+                      {data?.isSubscribed ? (
+                        <span className="ml-2 inline-block text-sm font-semibold text-white bg-emerald-600 px-2 py-1 rounded">ACTIVE</span>
+                      ) : (
+                        <span className="ml-2 inline-block text-sm font-semibold text-gray-700 bg-gray-200 px-2 py-1 rounded">INACTIVE</span>
+                      )}
+                    </div>
+                    {data?.subscription?.stripeSubscriptionId && (
+                      <div className="text-sm text-gray-500">Subscription ID: {data.subscription.stripeSubscriptionId}</div>
+                    )}
+                  </div>
                 </>
               ) : (
                 <p className="text-red-500 font-bold">No Active Plan</p>

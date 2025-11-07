@@ -31,7 +31,7 @@ const MealPlan = () => {
     const response = await fetch("/api/meal-plan", {
       method: "POST",
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(payload),
     });
@@ -60,80 +60,80 @@ const MealPlan = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 mt-20">
-      <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-4xl flex gap-4 aspect-w-16 aspect-h-9">
-        {/* Left Form Section */}
-        <div className="w-full sm:w-1/3 bg-emerald-500 rounded-lg text-white p-4 space-y-3">
-          <h1 className="text-2xl font-bold text-center">AI Meal Plan Generator</h1>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex flex-col">
-              <label htmlFor="dietType">Diet Type</label>
-              <input
-                type="text"
-                name="dietType"
-                id="dietType"
-                placeholder="Enter the diet type"
-                className="border border-gray-300 rounded p-2 bg-white w-full text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="calories">Calories</label>
-              <input
-                type="text"
-                name="calories"
-                id="calories"
-                placeholder="Enter the calories"
-                className="border border-gray-300 rounded p-2 bg-white w-full text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="cuisines">Cuisines</label>
-              <input
-                type="text"
-                name="cuisines"
-                id="cuisines"
-                placeholder="Enter the cuisines"
-                className="border border-gray-300 rounded p-2 bg-white w-full text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            <div className="flex flex-col">
-              <label htmlFor="allergies">Allergies</label>
-              <input
-                type="text"
-                name="allergies"
-                id="allergies"
-                placeholder="Enter the allergies"
-                className="border border-gray-300 rounded p-2 bg-white w-full text-black focus:outline-none focus:ring-2 focus:ring-emerald-500"
-              />
-            </div>
-            <div>
-              <label htmlFor="snacks">Snacks</label>
-              <input type="checkbox" name="snacks" id="snacks" />
-            </div>
-            <button type="submit" className="bg-green-700 w-full py-2 rounded-full text-white mt-4" disabled={isPending}>
-              {isPending ? "Generating...." : "Submit"}
-            </button>
-          </form>
-        </div>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-16">
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Form card */}
+          <div className="lg:col-span-1 bg-white/60 backdrop-blur-md border border-gray-100 rounded-2xl p-6 shadow-lg">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-4">AI Meal Plan Generator</h2>
+            <p className="text-sm text-gray-500 mb-6">Tell us a bit about your preferences and we'll generate a weekly meal plan.</p>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="dietType" className="block text-sm font-medium text-gray-700">Diet Type</label>
+                <input name="dietType" id="dietType" placeholder="e.g. vegetarian" className="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
 
-        {/* Right Meal Plan Display */}
-        <div className="w-full sm:w-2/3 overflow-auto">
-          {data?.mealPlan && (
-            <div>
-              {Object.keys(data.mealPlan).map((key) => {
-                const dat = data.mealPlan[key as dayType[number]];
-                return (
-                  <div key={key} className="mb-4 p-4 border-b">
-                    <h3 className="text-xl font-semibold">{key}</h3>
-                    <p><strong>Breakfast:</strong> {dat.Breakfast}</p>
-                    <p><strong>Lunch:</strong> {dat.Lunch}</p>
-                    <p><strong>Dinner:</strong> {dat.Dinner}</p>
-                    {dat.Snacks && <p><strong>Snacks:</strong> {dat.Snacks}</p>}
-                  </div>
-                );
-              })}
+              <div>
+                <label htmlFor="calories" className="block text-sm font-medium text-gray-700">Calories (daily)</label>
+                <input name="calories" id="calories" placeholder="e.g. 2000" className="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+
+              <div>
+                <label htmlFor="cuisines" className="block text-sm font-medium text-gray-700">Preferred Cuisines</label>
+                <input name="cuisines" id="cuisines" placeholder="e.g. Italian, Indian" className="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+
+              <div>
+                <label htmlFor="allergies" className="block text-sm font-medium text-gray-700">Allergies / Exclusions</label>
+                <input name="allergies" id="allergies" placeholder="e.g. peanuts, gluten" className="mt-1 block w-full rounded-lg border border-gray-200 px-3 py-2 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input type="checkbox" name="snacks" id="snacks" className="h-4 w-4 text-blue-600 rounded" />
+                <label htmlFor="snacks" className="text-sm text-gray-700">Include snacks</label>
+              </div>
+
+              <button type="submit" disabled={isPending} className="w-full inline-flex items-center justify-center gap-3 px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium hover:scale-[1.02] transition">
+                {isPending ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+                    Generating...
+                  </>
+                ) : (
+                  'Generate Plan'
+                )}
+              </button>
+            </form>
+          </div>
+
+          {/* Results area spans 2 cols on large screens */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 min-h-[300px]">
+              <h3 className="text-xl font-semibold text-gray-900 mb-4">Your Meal Plan</h3>
+              {!data?.mealPlan && (
+                <p className="text-gray-500">No plan generated yet — fill the form and click Generate Plan.</p>
+              )}
+
+              {data?.mealPlan && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {Object.keys(data.mealPlan).map((key) => {
+                    const dat = data.mealPlan[key as dayType[number]];
+                    return (
+                      <div key={key} className="p-4 rounded-lg border border-gray-100 shadow-sm bg-white">
+                        <h4 className="font-semibold text-lg mb-2">{key}</h4>
+                        <ul className="text-sm text-gray-700 space-y-1">
+                          <li><span className="font-medium">Breakfast:</span> {dat.Breakfast}</li>
+                          <li><span className="font-medium">Lunch:</span> {dat.Lunch}</li>
+                          <li><span className="font-medium">Dinner:</span> {dat.Dinner}</li>
+                          {dat.Snacks && <li><span className="font-medium">Snacks:</span> {dat.Snacks}</li>}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
