@@ -115,7 +115,8 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     }
 
     if (!userId) {
-      console.log("N user Id found");
+      console.log("No user Id found for subscription:", subId);
+      return;
     }
 
     await prisma.profile.update({
@@ -123,11 +124,11 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       data: {
         subscriptionIsActive: false,
         subscriptionTier: "Free",
-        stripeSubscriptionId: "",
+        stripeSubscriptionId: null,
       },
     });
 
-    console.log(`User ${userId}'s subscription deactivated`);
+    console.log(`User ${userId}'s subscription deactivated due to failed payment`);
   } catch (error) {
     console.error("Error handling failed payment for invoice:", error);
   }
@@ -150,7 +151,8 @@ async function handleCustomerSubscriptionDeleted(
     }
 
     if (!userId) {
-      console.log("N user Id found");
+      console.log("No user Id found for subscription:", subId);
+      return;
     }
 
     await prisma.profile.update({
@@ -158,12 +160,12 @@ async function handleCustomerSubscriptionDeleted(
       data: {
         subscriptionIsActive: false,
         subscriptionTier: "Free",
-        stripeSubscriptionId: "",
+        stripeSubscriptionId: null,
       },
     });
 
-    console.log(`User ${userId}'s subscription deactivated`);
+    console.log(`User ${userId}'s subscription cancelled`);
   } catch (error) {
-    console.error("Error handling failed payment for invoice:", error);
+    console.error("Error handling subscription cancellation:", error);
   }
 }

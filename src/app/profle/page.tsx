@@ -5,9 +5,15 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Loader2 } from "lucide-react";
 
 interface UpdateResponse {
-  message: string; // Corrected 'meassage' to 'message'
+  message: string;
 }
 
 const Profile = () => {
@@ -28,20 +34,23 @@ const Profile = () => {
   };
 
   const updateSubscriptionStatus = async (newPlan: string) => {
-    try {
-      const response = await fetch(`/api/change-plan`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ newPlan }),
-      });
-      const data = await response.json();
-      return data; // expecting { message }
-    } catch (error) {
-      console.log("Error updating subscription status", error);
+    const response = await fetch(`/api/change-plan`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ newPlan }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const error: any = new Error(data.message || "Failed to update subscription");
+      error.response = response;
       throw error;
     }
+
+    return data;
   };
 
   const { data } = useQuery({
@@ -51,24 +60,37 @@ const Profile = () => {
     staleTime: 5 * 60 * 1000,
   });
 
-  const { data: updateMessage, isPending, mutate } = useMutation<UpdateResponse, Error, string>({
+  const { isPending, mutate } = useMutation<UpdateResponse, Error, string>({
     mutationFn: updateSubscriptionStatus,
-
     onSuccess: (data) => {
-      toast.success(data.message); // Corrected here
+      toast.success(data.message || "Plan updated successfully");
       queryClient.invalidateQueries({
         queryKey: ["subscription"],
       });
     },
-
-    onError: (error: Error) => {
-      toast.error("Failed to update subscription.");
+    onError: async (error: any) => {
+      let errorMessage = "Failed to update subscription";
+      try {
+        if (error.response) {
+          const errorData = await error.response.json();
+          errorMessage = errorData.message || errorMessage;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      } catch (e) {
+        // If parsing fails, use default message
+      }
+      toast.error(errorMessage);
     },
   });
 
   const handleUpdateSubscription = () => {
     if (!selectedOption) {
-      alert("Please select a plan to update");
+      toast.error("Please select a plan to update to");
+      return;
+    }
+    if (selectedOption === currentPlan?.interval) {
+      toast.error("You are already on this plan");
       return;
     }
     mutate(selectedOption);
@@ -79,30 +101,45 @@ const Profile = () => {
   );
 
   const cancelSubscription = async () => {
-    try {
-      const response = await fetch("/api/cancel-plan", {
-        method: "DELETE",
-        headers: {
-          "Content-type": "application/json",
-        },
-      });
-      const data = await response.json();
-      return data.message;
-    } catch (error) {
-      console.log("Error cancelling subscription", error);
+    const response = await fetch("/api/cancel-plan", {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      const error: any = new Error(data.message || "Failed to cancel subscription");
+      error.response = response;
+      throw error;
     }
+
+    return data;
   };
 
   const { isPending: deleteIsPending, mutate: deleteMutation } = useMutation<UpdateResponse, Error>({
     mutationFn: cancelSubscription,
-    onSuccess: () => {
-      toast.success("Subscription cancelled");
+    onSuccess: (data) => {
+      toast.success(data.message || "Subscription cancelled successfully");
       queryClient.invalidateQueries({
         queryKey: ["subscription"],
       });
     },
-    onError: (error: Error) => {
-      toast.error("Failed to cancel the subscription");
+    onError: async (error: any) => {
+      let errorMessage = "Failed to cancel the subscription";
+      try {
+        if (error.response) {
+          const errorData = await error.response.json();
+          errorMessage = errorData.message || errorMessage;
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+      } catch (e) {
+        // If parsing fails, use default message
+      }
+      toast.error(errorMessage);
     },
   });
 
@@ -114,97 +151,179 @@ const Profile = () => {
 
   if (!isLoaded)
     return (
-      <div className="flex justify-center items-center h-screen bg-gray-100">
-        Loading Your Profile...
+      <div className="flex justify-center items-center h-screen bg-slate-50">
+        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
     );
 
   if (!isSignedIn)
     return (
-      <div className="text-center text-lg">
-        Please sign in to view your profile.
+      <div className="flex justify-center items-center h-screen bg-slate-50">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>Sign In Required</CardTitle>
+            <CardDescription>Please sign in to view your profile.</CardDescription>
+          </CardHeader>
+        </Card>
       </div>
     );
 
   const handleDelete = () => {
-    deleteMutation();
+    if (confirm("Are you sure you want to cancel your subscription? You'll continue to have access until the end of your billing period.")) {
+      deleteMutation();
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <div className="bg-emerald-500 max-w-7xl w-full p-6 rounded-lg shadow-lg flex justify-center items-center">
-        <div className="flex flex-col lg:flex-row items-center gap-6 w-full">
-          {/* Left Section: Profile Image & Info */}
-          <div className="bg-emerald-800 text-white p-6 rounded-xl flex flex-col justify-center items-center gap-4 w-full lg:w-1/3">
-            {user.imageUrl && (
-              <Image
-                src={user.imageUrl}
-                alt="profile"
-                width={100}
-                height={100}
-                className="rounded-full border-4 border-white"
-              />
-            )}
-            <h1 className="text-3xl font-semibold">{user?.fullName}</h1>
-            <p className="text-lg font-medium">{user?.emailAddresses[0].emailAddress}</p>
-          </div>
-
-          <div className="bg-white p-6 rounded-xl shadow-md w-full lg:w-2/3">
-            <h2 className="text-2xl font-semibold mb-4">Subscription Details</h2>
-            <div className="flex flex-col gap-2 rounded-lg py-3 px-4 bg-gray-50">
-              {currentPlan ? (
-                <>
-                  <h1 className="text-xl text-emerald-700 font-bold">Current Plan</h1>
-                  <div className="flex flex-col gap-1">
-                    <span>
-                      <strong>Plan</strong>: {currentPlan?.interval} Plan
-                    </span>
-                    <span>
-                      <strong>Amount</strong>: ${currentPlan?.amount} USD
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <strong>Status</strong>:
-                      {data?.isSubscribed ? (
-                        <span className="ml-2 inline-block text-sm font-semibold text-white bg-emerald-600 px-2 py-1 rounded">ACTIVE</span>
-                      ) : (
-                        <span className="ml-2 inline-block text-sm font-semibold text-gray-700 bg-gray-200 px-2 py-1 rounded">INACTIVE</span>
-                      )}
-                    </div>
-                    {data?.subscription?.stripeSubscriptionId && (
-                      <div className="text-sm text-gray-500">Subscription ID: {data.subscription.stripeSubscriptionId}</div>
-                    )}
-                  </div>
-                </>
+    <div className="min-h-screen bg-slate-50 py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Profile Header */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-4">
+              {user?.imageUrl ? (
+                <Image
+                  src={user.imageUrl}
+                  alt="Profile"
+                  width={80}
+                  height={80}
+                  className="rounded-full border-2 border-slate-200"
+                />
               ) : (
-                <p className="text-red-500 font-bold">No Active Plan</p>
+                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center border-2 border-slate-200">
+                  <span className="text-2xl font-semibold text-slate-600">
+                    {user?.firstName?.[0] || "U"}
+                  </span>
+                </div>
               )}
+              <div>
+                <CardTitle className="text-2xl">{user?.fullName}</CardTitle>
+                <CardDescription className="text-base mt-1">
+                  {user?.emailAddresses[0]?.emailAddress}
+                </CardDescription>
+              </div>
             </div>
-          </div>
+          </CardHeader>
+        </Card>
 
-          <div className="bg-white shadow-lg rounded-lg py-4 px-2">
-            <h1 className="text-md font-bold text-center mb-2">Change Subscription Plan</h1>
-            <select value={selectedOption} onChange={(e) => setSelectedOption(e.target.value)}>
-              <option value="" disabled>Select The new Plan</option>
-              {MealPlans.map((plan) => {
-                return (
-                  <option value={plan.interval} key={plan.name}>
-                    {plan.name} - {plan.amount} / {plan.interval}
-                  </option>
-                );
-              })}
-            </select>
-            <button
-              className="mt-3 w-full bg-emerald-500 text-white rounded-lg shadow-md px-2 py-2"
-              disabled={isPending}
-              onClick={handleUpdateSubscription}
-            >
-              {isPending ? "Updating...." : "Save Changes"}
-            </button>
-            <button onClick={handleDelete} disabled={deleteIsPending}>
-              {deleteIsPending ? "Cancelling..." : "Cancel Subscription"}
-            </button>
-          </div>
-        </div>
+        {/* Subscription Details */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Subscription Details</CardTitle>
+            <CardDescription>Manage your subscription and billing</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {currentPlan ? (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-slate-600">Current Plan</p>
+                    <p className="text-xl font-semibold text-slate-900 mt-1">
+                      {currentPlan.name}
+                    </p>
+                  </div>
+                  <Badge variant={data?.isSubscribed ? "default" : "secondary"}>
+                    {data?.isSubscribed ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
+                <Separator />
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-sm text-slate-600">Amount</p>
+                    <p className="text-lg font-semibold text-slate-900 mt-1">
+                      ${currentPlan.amount} / {currentPlan.interval}
+                    </p>
+                  </div>
+                  {data?.subscription?.stripeSubscriptionId && (
+                    <div>
+                      <p className="text-sm text-slate-600">Subscription ID</p>
+                      <p className="text-sm font-mono text-slate-900 mt-1 truncate">
+                        {data.subscription.stripeSubscriptionId}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <p className="text-slate-600">No active subscription</p>
+                <Button className="mt-4" asChild>
+                  <a href="/subscribe">View Plans</a>
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Change Plan */}
+        {currentPlan && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Change Subscription Plan</CardTitle>
+              <CardDescription>Upgrade or downgrade your plan</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-900">Select Plan</label>
+                <Select value={selectedOption} onValueChange={setSelectedOption}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a plan" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {MealPlans.map((plan) => (
+                      <SelectItem key={plan.name} value={plan.interval}>
+                        {plan.name} - ${plan.amount} / {plan.interval}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                onClick={handleUpdateSubscription}
+                disabled={isPending || !selectedOption}
+                className="w-full"
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Updating...
+                  </>
+                ) : (
+                  "Update Plan"
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Cancel Subscription */}
+        {currentPlan && data?.isSubscribed && (
+          <Card className="border-red-200">
+            <CardHeader>
+              <CardTitle className="text-red-900">Cancel Subscription</CardTitle>
+              <CardDescription>
+                Cancel your subscription at any time. You'll continue to have access until the end of your billing period.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={deleteIsPending}
+                className="w-full"
+              >
+                {deleteIsPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Cancelling...
+                  </>
+                ) : (
+                  "Cancel Subscription"
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

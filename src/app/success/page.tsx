@@ -3,6 +3,9 @@ import { stripe } from "@/lib/Stripe";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle2 } from "lucide-react";
 
 async function getSessionStatus(sessionId: string) {
   try {
@@ -42,11 +45,12 @@ async function updateUserProfile(userId: string, session: any) {
 export default async function SuccessPage({
   searchParams,
 }: {
-  searchParams: { session_id: string };
+  searchParams: Promise<{ session_id: string }>;
 }) {
   const authResult = await auth();
   const userId = authResult.userId;
-  const sessionId = searchParams.session_id;
+  const params = await searchParams;
+  const sessionId = params.session_id;
 
   if (!sessionId || !userId) {
     redirect("/");
@@ -70,43 +74,26 @@ export default async function SuccessPage({
   }
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gradient-to-r from-green-400 to-blue-500">
-      <div className="bg-white p-8 rounded-xl shadow-lg max-w-md w-full text-center">
-        <div className="mb-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-24 h-24 text-green-500 mx-auto"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            strokeWidth="2"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 11l3 3L22 4M9 19l3-3L22 4"
-            />
-          </svg>
-        </div>
-        <h1 className="text-2xl font-semibold text-gray-800 mb-4">
-          Payment Successful!
-        </h1>
-        <p className="text-lg text-gray-600 mb-6">
-          Your payment has been processed successfully. Thank you for your
-          purchase!
-        </p>
-        <div className="space-x-4">
-          <button className="bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition duration-300">
-            <Link href={"/"}> Go to Dashboard</Link>
-          </button>
-          <button className="bg-gray-200 text-gray-800 px-6 py-2 rounded-full hover:bg-gray-300 transition duration-300">
-            <Link href={"/"}> Go to Home</Link>
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <Card className="max-w-md w-full text-center">
+        <CardHeader className="pb-4">
+          <div className="mx-auto w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
+            <CheckCircle2 className="h-8 w-8 text-green-600" />
+          </div>
+          <CardTitle className="text-2xl">Payment Successful!</CardTitle>
+          <CardDescription className="text-base mt-2">
+            Your payment has been processed successfully. Thank you for your purchase!
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Button asChild className="w-full">
+            <Link href="/mealplan">Go to Meal Planner</Link>
+          </Button>
+          <Button asChild variant="outline" className="w-full">
+            <Link href="/">Go to Home</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
-};
-
-
+}

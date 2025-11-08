@@ -38,10 +38,13 @@ export const GET = async (req: NextRequest) => {
         stripeSubscriptionId: profile.stripeSubscriptionId,
       },
     });
-  } catch (error) {
-    console.error("Error fetching details:", error);
+  } catch (error: any) {
+    console.error("Error fetching subscription details:", error);
     return NextResponse.json(
-      { message: "Internal server error" },
+      { 
+        message: error.message || "Failed to fetch subscription details. Please try again.",
+        error: "INTERNAL_ERROR",
+      },
       { status: 500 }
     );
   }

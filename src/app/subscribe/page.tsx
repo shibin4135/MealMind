@@ -3,9 +3,12 @@
 import { MealPlans } from "@/lib/Plans";
 import { useUser } from "@clerk/nextjs";
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 import React from "react";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check } from "lucide-react";
 
 type SubscribeResponse = {
   url: string;
@@ -14,7 +17,7 @@ type SubscribeResponse = {
 
 export const subscribe = async (planType: string, userId: string, email: string): Promise<SubscribeResponse> => {
   try {
-    const response = await fetch("http://localhost:3000/api/checkout", {
+    const response = await fetch("/api/checkout", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -24,8 +27,8 @@ export const subscribe = async (planType: string, userId: string, email: string)
     const data = await response.json();
     return data as SubscribeResponse;
   } catch (error: any) {
-    toast.error(error.message)
-    throw new Error(error.message)
+    toast.error(error.message);
+    throw new Error(error.message);
   }
 };
 
@@ -48,78 +51,59 @@ const Subscribe = () => {
   };
 
   return (
-    <div className="flex justify-center items-center py-32 flex-col">
-      <h1 className="text-3xl font-bold text-center mb-5">Pricing</h1>
-      <p className="text-center text-lg mb-10">
-        Get started with our weekly plan or upgrade to monthly or yearly when
-        you’re ready.
-      </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl w-full">
-        {MealPlans.map((meal) => {
-          return (
-            <div
-              key={meal.amount}
-              className={`${meal.isPopular
-                ? "bg-yellow-50 border-2 border-yellow-500"
-                : "bg-white"
-                } shadow-xl p-6 rounded-xl space-y-5 transition-all duration-300 hover:shadow-2xl hover:scale-105 relative`}
+    <div className="min-h-screen bg-slate-50 py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+            Pricing
+          </h1>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            Choose the plan that works best for you. All plans include unlimited AI meal plans.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          {MealPlans.map((plan) => (
+            <Card
+              key={plan.amount}
+              className={`relative ${plan.isPopular ? "border-2 border-slate-900 shadow-lg" : ""}`}
             >
-              {/* Most Popular Badge */}
-              {meal.isPopular && (
-                <div className="absolute top-3 right-3 bg-yellow-500 text-white py-1 px-4 rounded-lg text-xs font-semibold">
-                  Most Popular
+              {plan.isPopular && (
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                  <Badge className="bg-slate-900 text-white">Most Popular</Badge>
                 </div>
               )}
-
-              <h2 className="font-bold text-xl text-center">{meal.name}</h2>
-              <h3 className="text-2xl font-bold text-center">
-                ${meal.amount}
-                <span className="text-sm text-gray-500">/{meal.interval}</span>
-              </h3>
-              <p className="text-center text-gray-700">{meal.description}</p>
-
-              <ul className="space-y-2">
-                {meal.features.map((m, index) => {
-                  return (
-                    <li
-                      key={index}
-                      className="flex items-center gap-2 text-sm text-gray-600"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5 text-emerald-500"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m4.5 12.75 6 6 9-13.5"
-                        />
-                      </svg>
-                      {m}
+              <CardHeader>
+                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold text-slate-900">${plan.amount}</span>
+                  <span className="text-slate-600 ml-2">/{plan.interval}</span>
+                </div>
+                <CardDescription className="mt-4">{plan.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3">
+                  {plan.features.map((feature, index) => (
+                    <li key={index} className="flex items-start gap-3">
+                      <Check className="h-5 w-5 text-slate-900 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate-600">{feature}</span>
                     </li>
-                  );
-                })}
-              </ul>
-
-              {/* Subscribe Button */}
-              <button
-                className={`${meal.interval === "month"
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                  : "bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
-                  } mt-6 block w-full py-3 px-6 border border-transparent rounded-md text-center font-medium transition-colors duration-300`}
-                onClick={() => handleSubscribe(meal.interval)} // Pass plan type to the function
-              >
-                {isPending ? "Processing" : (meal.isPopular
-                  ? "Choose a Plan"
-                  : `Subscribe to ${meal.name}`)}
-              </button>
-            </div>
-          );
-        })}
+                  ))}
+                </ul>
+              </CardContent>
+              <CardFooter>
+                <Button
+                  className="w-full"
+                  variant={plan.isPopular ? "default" : "outline"}
+                  onClick={() => handleSubscribe(plan.interval)}
+                  disabled={isPending}
+                >
+                  {isPending ? "Processing..." : `Subscribe to ${plan.name}`}
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </div>
     </div>
   );
