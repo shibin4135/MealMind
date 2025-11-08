@@ -42,6 +42,7 @@ interface SavedPlan {
   };
   createdAt: string;
   updatedAt: string;
+  isFavorite?: boolean;
 }
 
 const SavedMealPlans = () => {
@@ -99,7 +100,7 @@ const SavedMealPlans = () => {
     let totalCalories = 0;
     let mealCount = 0;
 
-    Object.values(mealPlan as Record<DayName, DailyMealPlan>).forEach((day) => {
+    Object.values(mealPlan).forEach((day) => {
       ["Breakfast", "Lunch", "Dinner", "Snacks"].forEach((type) => {
         const mealText = (day as any)[type];
         if (mealText) {
@@ -123,13 +124,20 @@ const SavedMealPlans = () => {
 
   if (!isSignedIn) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-10 text-center max-w-md">
-          <CardTitle>Please Sign In</CardTitle>
-          <CardDescription className="mt-2">You need to be signed in to view your saved meal plans.</CardDescription>
-          <Button asChild className="mt-4">
-            <Link href="/sign-up">Sign In</Link>
-          </Button>
+      <div className="min-h-screen flex items-center justify-center px-4">
+        <Card className="max-w-md w-full">
+          <CardHeader className="text-center">
+            <Lock className="h-12 w-12 mx-auto mb-4 text-slate-400" />
+            <CardTitle>Please Sign In</CardTitle>
+            <CardDescription className="mt-2">
+              You need to be signed in to view your saved meal plans.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button asChild className="w-full mt-4">
+              <Link href="/sign-up">Sign In</Link>
+            </Button>
+          </CardContent>
         </Card>
       </div>
     );
@@ -151,85 +159,101 @@ const SavedMealPlans = () => {
         isLoading={deleteMutation.isPending}
       />
 
-      <div className="max-w-7xl mx-auto py-12 px-4">
+      <div className="min-h-screen bg-white py-16 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h1 className="text-3xl font-semibold mb-8 text-slate-900">Saved Meal Plans</h1>
 
-        <h1 className="text-4xl font-bold mb-6">Saved Meal Plans</h1>
-
-        <div className="relative max-w-md mb-8">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-          <Input
-            placeholder="Search meal plans..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-
-        {isLoading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((i) => (
-              <Card key={i} className="p-4">
-                <Skeleton className="h-6 w-3/4 mb-2" />
-                <Skeleton className="h-4 w-1/2" />
-              </Card>
-            ))}
+          <div className="relative max-w-md mb-10">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Input
+              placeholder="Search meal plans..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 h-10"
+            />
           </div>
-        ) : savedPlans.length === 0 ? (
-          <Card className="p-10 text-center max-w-md mx-auto">
-            <FileText className="h-12 w-12 mx-auto mb-4 text-slate-400" />
-            <CardTitle>No Saved Meal Plans</CardTitle>
-            <CardDescription className="mt-2">Generate and save a meal plan to see it here.</CardDescription>
-            <Button asChild className="mt-4">
-              <Link href="/mealplan">Generate Meal Plan</Link>
-            </Button>
-          </Card>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-            {savedPlans.map((plan) => {
-              const nutrition = calculateNutrition(plan.mealPlan);
-              const createdDate = new Date(plan.createdAt).toLocaleDateString("en-US");
-
-              return (
-                <Card key={plan.id} className="p-4 hover:shadow-lg transition">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="line-clamp-2">{plan.title}</CardTitle>
-                    <CardDescription className="flex items-center gap-2 mt-1 text-sm">
-                      <Calendar className="h-4 w-4" />
-                      {createdDate}
-                    </CardDescription>
-                  </CardHeader>
-
-                  <CardContent className="space-y-3">
-                    <p className="text-sm">Meals: <span className="font-semibold">{nutrition.mealCount}</span></p>
-                    <p className="text-sm">Calories: <span className="font-semibold">{nutrition.totalCalories}</span></p>
-
-                    <div className="flex gap-2 pt-2">
-                      <Button asChild className="flex-1">
-                        <Link href={`/saved-meal-plans/${plan.id}`}>
-                          <Eye className="h-4 w-4 mr-1" /> View
-                        </Link>
-                      </Button>
-
-                      <Button
-                        variant="outline"
-                        onClick={() => handleDelete(plan.id)}
-                        disabled={deleteMutation.isPending}
-                        className="flex-1">
-                        {deleteMutation.isPending && planToDelete === plan.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Trash2 className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <Card key={i} className="border-0 shadow-sm rounded-xl">
+                  <CardContent className="p-6">
+                    <Skeleton className="h-6 w-3/4 mb-3" />
+                    <Skeleton className="h-4 w-1/2" />
                   </CardContent>
                 </Card>
-              );
-            })}
-          </div>
-        )}
+              ))}
+            </div>
+          ) : savedPlans.length === 0 ? (
+            <Card className="border-0 shadow-sm rounded-xl max-w-md mx-auto">
+              <CardContent className="p-12 text-center">
+                <FileText className="h-12 w-12 mx-auto mb-4 text-slate-300" />
+                <CardTitle className="mb-2">No Saved Meal Plans</CardTitle>
+                <CardDescription className="mb-6">
+                  Generate and save a meal plan to see it here.
+                </CardDescription>
+                <Button asChild>
+                  <Link href="/mealplan">Generate Meal Plan</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {savedPlans.map((plan) => {
+                const nutrition = calculateNutrition(plan.mealPlan);
+                const createdDate = new Date(plan.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                });
 
+                return (
+                  <Card key={plan.id} className="border-0 shadow-sm rounded-xl hover:shadow-md transition">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-lg font-semibold line-clamp-2 text-slate-900">
+                        {plan.title}
+                      </CardTitle>
+                      <CardDescription className="flex items-center gap-2 mt-2 text-sm">
+                        <Calendar className="h-4 w-4" />
+                        {createdDate}
+                      </CardDescription>
+                    </CardHeader>
+
+                    <CardContent className="space-y-4">
+                      {plan.preferences?.calories && (
+                        <p className="text-sm text-slate-600">
+                          {plan.preferences.calories} cal/day
+                        </p>
+                      )}
+
+                      <div className="flex gap-2 pt-2">
+                        <Button asChild variant="outline" className="flex-1 h-9">
+                          <Link href={`/saved-meal-plans/${plan.id}`}>
+                            <Eye className="h-4 w-4 mr-1" />
+                            View
+                          </Link>
+                        </Button>
+
+                        <Button
+                          variant="outline"
+                          onClick={() => handleDelete(plan.id)}
+                          disabled={deleteMutation.isPending}
+                          className="flex-1 h-9"
+                        >
+                          {deleteMutation.isPending && planToDelete === plan.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="h-4 w-4" />
+                          )}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </>
   );

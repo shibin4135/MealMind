@@ -119,7 +119,6 @@ const Favorites = () => {
               <MealCard
                 key={meal.id}
                 meal={meal}
-                isFavorite={true}
               />
             ))}
           </div>

@@ -32,7 +32,20 @@ export const GET = async (
       );
     }
 
-    return NextResponse.json({ savedPlan });
+    // Check if plan is favorited
+    const favoritePlan = await prisma.favoritePlan.findUnique({
+      where: {
+        userId_planId: {
+          userId: clerkUser.id,
+          planId: id,
+        },
+      },
+    });
+
+    return NextResponse.json({ 
+      savedPlan,
+      isFavorite: !!favoritePlan,
+    });
   } catch (error: any) {
     console.error("Error fetching saved meal plan:", error);
     return NextResponse.json(

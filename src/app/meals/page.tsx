@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -28,18 +28,6 @@ const Meals = () => {
     },
   });
 
-  const { data: favoritesData } = useQuery({
-    queryKey: ["favorites"],
-    queryFn: async () => {
-      const response = await fetch("/api/favorites");
-      if (!response.ok) return { favorites: [] };
-      return response.json();
-    },
-  });
-
-  const favoriteMealIds = useMemo(() => {
-    return new Set(favoritesData?.favorites?.map((f: any) => f.mealId) || []);
-  }, [favoritesData]);
 
   const meals = mealsData?.meals || [];
 
@@ -147,7 +135,6 @@ const Meals = () => {
               <MealCard
                 key={meal.id}
                 meal={meal}
-                isFavorite={favoriteMealIds.has(meal.id)}
               />
             ))}
           </div>

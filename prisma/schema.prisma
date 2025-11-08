@@ -14,17 +14,18 @@ datasource db {
 }
 
 model Profile {
-  id                   String     @id @default(uuid())
-  userId               String     @unique
+  id                   String          @id @default(uuid())
+  userId               String          @unique
   email                String
-  subscriptionIsActive Boolean    @default(false)
+  subscriptionIsActive Boolean         @default(false)
   subscriptionTier     String
-  stripeSubscriptionId String?    @unique
-  createdAt            DateTime   @default(now())
-  updatedAt            DateTime   @updatedAt
+  stripeSubscriptionId String?         @unique
+  createdAt            DateTime        @default(now())
+  updatedAt            DateTime        @updatedAt
   favorites            Favorite[]
   mealLogs             MealLog[]
   savedMealPlans       SavedMealPlan[]
+  favoritePlans        FavoritePlan[]
 }
 
 model Meal {
@@ -68,15 +69,28 @@ model MealLog {
 }
 
 model SavedMealPlan {
-  id          String   @id @default(uuid())
-  userId      String
-  title       String
-  mealPlan    Json     // Stores the meal plan JSON structure
-  preferences Json?    // Stores dietType, calories, cuisines, allergies, snacks
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  profile     Profile  @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  id            String         @id @default(uuid())
+  userId        String
+  title         String
+  mealPlan      Json // Stores the meal plan JSON structure
+  preferences   Json? // Stores dietType, calories, cuisines, allergies, snacks
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  profile       Profile        @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  favoritePlans FavoritePlan[]
 
   @@index([userId])
   @@index([userId, createdAt])
+}
+
+model FavoritePlan {
+  id        String        @id @default(uuid())
+  userId    String
+  planId    String
+  createdAt DateTime      @default(now())
+  profile   Profile       @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  plan      SavedMealPlan @relation(fields: [planId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, planId])
+  @@index([userId])
 }

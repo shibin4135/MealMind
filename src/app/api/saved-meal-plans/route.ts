@@ -31,7 +31,25 @@ export const GET = async (req: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ savedPlans });
+    // Get favorite plan IDs for this user
+    const favoritePlans = await prisma.favoritePlan.findMany({
+      where: {
+        userId: clerkUser.id,
+      },
+      select: {
+        planId: true,
+      },
+    });
+
+    const favoritePlanIds = new Set(favoritePlans.map((fp) => fp.planId));
+
+    // Add isFavorite flag to each plan
+    const plansWithFavorites = savedPlans.map((plan) => ({
+      ...plan,
+      isFavorite: favoritePlanIds.has(plan.id),
+    }));
+
+    return NextResponse.json({ savedPlans: plansWithFavorites });
   } catch (error: any) {
     console.error("Error fetching saved meal plans:", error);
     return NextResponse.json(
