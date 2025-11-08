@@ -24,6 +24,7 @@ model Profile {
   updatedAt            DateTime   @updatedAt
   favorites            Favorite[]
   mealLogs             MealLog[]
+  savedMealPlans       SavedMealPlan[]
 }
 
 model Meal {
@@ -64,4 +65,18 @@ model MealLog {
   meal      Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
 
   @@index([userId, date])
+}
+
+model SavedMealPlan {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  mealPlan    Json     // Stores the meal plan JSON structure
+  preferences Json?    // Stores dietType, calories, cuisines, allergies, snacks
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  profile     Profile  @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([userId, createdAt])
 }

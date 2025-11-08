@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
+import { ConfirmationDialog } from "@/components/confirmation-dialog";
 
 interface UpdateResponse {
   message: string;
@@ -19,6 +20,7 @@ interface UpdateResponse {
 const Profile = () => {
   const { user, isLoaded, isSignedIn } = useUser();
   const [selectedOption, setSelectedOption] = useState("");
+  const [cancelDialogOpen, setCancelDialogOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -119,7 +121,7 @@ const Profile = () => {
     return data;
   };
 
-  const { isPending: deleteIsPending, mutate: deleteMutation } = useMutation<UpdateResponse, Error>({
+  const deleteMutation = useMutation<UpdateResponse, Error>({
     mutationFn: cancelSubscription,
     onSuccess: (data) => {
       toast.success(data.message || "Subscription cancelled successfully");
@@ -169,48 +171,65 @@ const Profile = () => {
     );
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to cancel your subscription? You'll continue to have access until the end of your billing period.")) {
-      deleteMutation();
-    }
+    setCancelDialogOpen(true);
+  };
+
+  const confirmCancel = () => {
+    deleteMutation.mutate();
+    setCancelDialogOpen(false);
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Profile Header */}
-        <Card className="border-slate-200 dark:border-slate-800">
-          <CardHeader>
-            <div className="flex items-center gap-4">
-              {user?.imageUrl ? (
-                <Image
-                  src={user.imageUrl}
-                  alt="Profile"
-                  width={80}
-                  height={80}
-                  className="rounded-full border-2 border-slate-200 dark:border-slate-800"
-                />
-              ) : (
-                <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-2 border-slate-200 dark:border-slate-800">
-                  <span className="text-2xl font-semibold text-slate-600 dark:text-slate-400">
-                    {user?.firstName?.[0] || "U"}
-                  </span>
+    <>
+      <ConfirmationDialog
+        open={cancelDialogOpen}
+        onOpenChange={setCancelDialogOpen}
+        onConfirm={confirmCancel}
+        title="Cancel Subscription"
+        description="Are you sure you want to cancel your subscription? You'll continue to have access until the end of your billing period."
+        confirmText="Cancel Subscription"
+        cancelText="Keep Subscription"
+        variant="destructive"
+        isLoading={deleteMutation.isPending}
+      />
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+          {/* Profile Header */}
+          <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-lg transition-all duration-200">
+            <CardHeader className="pb-4">
+              <div className="flex items-center gap-4 sm:gap-6">
+                {user?.imageUrl ? (
+                  <Image
+                    src={user.imageUrl}
+                    alt="Profile"
+                    width={80}
+                    height={80}
+                    className="rounded-full border-2 border-slate-200 dark:border-slate-800 shrink-0"
+                  />
+                ) : (
+                  <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-2 border-slate-200 dark:border-slate-800 shrink-0">
+                    <span className="text-xl sm:text-2xl font-semibold text-slate-600 dark:text-slate-400">
+                      {user?.firstName?.[0] || "U"}
+                    </span>
+                  </div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-slate-50 break-words">
+                    {user?.fullName}
+                  </CardTitle>
+                  <CardDescription className="text-sm sm:text-base mt-1 break-words">
+                    {user?.emailAddresses[0]?.emailAddress}
+                  </CardDescription>
                 </div>
-              )}
-              <div>
-                <CardTitle className="text-2xl">{user?.fullName}</CardTitle>
-                <CardDescription className="text-base mt-1">
-                  {user?.emailAddresses[0]?.emailAddress}
-                </CardDescription>
               </div>
-            </div>
-          </CardHeader>
-        </Card>
+            </CardHeader>
+          </Card>
 
         {/* Subscription Details */}
-        <Card className="border-slate-200 dark:border-slate-800">
-          <CardHeader>
-            <CardTitle>Subscription Details</CardTitle>
-            <CardDescription>Manage your subscription and billing</CardDescription>
+        <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-lg transition-all duration-200">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg sm:text-xl">Subscription Details</CardTitle>
+            <CardDescription className="text-xs sm:text-sm">Manage your subscription and billing</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
             {currentPlan ? (
@@ -257,21 +276,21 @@ const Profile = () => {
 
         {/* Change Plan */}
         {currentPlan && (
-          <Card className="border-slate-200 dark:border-slate-800">
-            <CardHeader>
-              <CardTitle>Change Subscription Plan</CardTitle>
-              <CardDescription>Upgrade or downgrade your plan</CardDescription>
+          <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:shadow-lg transition-all duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg sm:text-xl">Change Subscription Plan</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">Upgrade or downgrade your plan</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-900 dark:text-slate-50">Select Plan</label>
+                <label className="text-xs sm:text-sm font-medium text-slate-900 dark:text-slate-50">Select Plan</label>
                 <Select value={selectedOption} onValueChange={setSelectedOption}>
-                  <SelectTrigger>
+                  <SelectTrigger className="h-10 sm:h-11 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                     <SelectValue placeholder="Select a plan" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
                     {MealPlans.map((plan) => (
-                      <SelectItem key={plan.name} value={plan.interval}>
+                      <SelectItem key={plan.name} value={plan.interval} className="text-sm">
                         {plan.name} - ${plan.amount} / {plan.interval}
                       </SelectItem>
                     ))}
@@ -281,7 +300,7 @@ const Profile = () => {
               <Button
                 onClick={handleUpdateSubscription}
                 disabled={isPending || !selectedOption}
-                className="w-full"
+                className="w-full h-10 sm:h-11 text-sm sm:text-base font-medium"
               >
                 {isPending ? (
                   <>
@@ -298,10 +317,10 @@ const Profile = () => {
 
         {/* Cancel Subscription */}
         {currentPlan && data?.isSubscribed && (
-          <Card className="border-red-200 dark:border-red-900">
-            <CardHeader>
-              <CardTitle className="text-red-900 dark:text-red-400">Cancel Subscription</CardTitle>
-              <CardDescription>
+          <Card className="border-red-200 dark:border-red-900 bg-red-50/50 dark:bg-red-950/50 hover:shadow-lg transition-all duration-200">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg sm:text-xl text-red-900 dark:text-red-400">Cancel Subscription</CardTitle>
+              <CardDescription className="text-xs sm:text-sm">
                 Cancel your subscription at any time. You'll continue to have access until the end of your billing period.
               </CardDescription>
             </CardHeader>
@@ -309,10 +328,10 @@ const Profile = () => {
               <Button
                 variant="destructive"
                 onClick={handleDelete}
-                disabled={deleteIsPending}
-                className="w-full"
+                disabled={deleteMutation.isPending}
+                className="w-full h-10 sm:h-11 text-sm sm:text-base font-medium"
               >
-                {deleteIsPending ? (
+                {deleteMutation.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Cancelling...
@@ -325,7 +344,7 @@ const Profile = () => {
           </Card>
         )}
       </div>
-    </div>
+    </>
   );
 };
 

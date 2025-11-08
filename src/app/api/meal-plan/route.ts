@@ -5,7 +5,6 @@ import { prisma } from "@/lib/config";
 
 const openAi = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
-    baseURL: "https://openrouter.ai/api/v1",
 });
 
 export const POST = async (req: NextRequest) => {
@@ -22,7 +21,7 @@ export const POST = async (req: NextRequest) => {
             );
         }
 
-        // Check if user has an active subscription
+    
         const profile = await prisma.profile.findUnique({
             where: { userId: clerkUser.id },
             select: {
@@ -103,7 +102,7 @@ export const POST = async (req: NextRequest) => {
         let response;
         try {
             response = await openAi.chat.completions.create({
-                model: "meta-llama/llama-3.2-3b-instruct:free",
+                model: "gpt-4.1-mini",
                 max_tokens: 2000,
                 temperature: 0.7,
                 messages: [

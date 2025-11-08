@@ -44,19 +44,38 @@ export const POST = async (req: NextRequest) => {
       );
     }
 
-    const { mealId } = await req.json();
+    const { mealId, mealData } = await req.json();
 
-    if (!mealId) {
+    if (!mealId && !mealData) {
       return NextResponse.json(
-        { error: "Meal ID is required" },
+        { error: "Meal ID or meal data is required" },
         { status: 400 }
       );
     }
 
-    // Check if meal exists
-    const meal = await prisma.meal.findUnique({
-      where: { id: mealId },
-    });
+    // Check if meal exists, or create it if mealData is provided
+    let meal = null;
+    if (mealId) {
+      meal = await prisma.meal.findUnique({
+        where: { id: mealId },
+      });
+    }
+
+    // If meal doesn't exist and mealData is provided, create it
+    if (!meal && mealData) {
+      meal = await prisma.meal.create({
+        data: {
+          name: mealData.name,
+          description: mealData.description || mealData.name,
+          calories: mealData.calories || 0,
+          protein: mealData.protein || 0,
+          carbs: mealData.carbs || 0,
+          fat: mealData.fat || 0,
+          category: mealData.category || "Quick Meal",
+          imageUrl: mealData.imageUrl || null,
+        },
+      });
+    }
 
     if (!meal) {
       return NextResponse.json(
@@ -70,7 +89,7 @@ export const POST = async (req: NextRequest) => {
       where: {
         userId_mealId: {
           userId: clerkUser.id,
-          mealId: mealId,
+          mealId: meal.id,
         },
       },
     });
@@ -85,7 +104,7 @@ export const POST = async (req: NextRequest) => {
     const favorite = await prisma.favorite.create({
       data: {
         userId: clerkUser.id,
-        mealId: mealId,
+        mealId: meal.id,
       },
       include: {
         meal: true,

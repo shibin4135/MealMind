@@ -40,7 +40,31 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <Toaster position="top-right" />
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 3000,
+                  style: {
+                    background: "hsl(var(--card))",
+                    color: "hsl(var(--card-foreground))",
+                    border: "1px solid hsl(var(--border))",
+                    borderRadius: "0.5rem",
+                    padding: "12px 16px",
+                  },
+                  success: {
+                    iconTheme: {
+                      primary: "hsl(142, 71%, 45%)",
+                      secondary: "white",
+                    },
+                  },
+                  error: {
+                    iconTheme: {
+                      primary: "hsl(0, 84%, 60%)",
+                      secondary: "white",
+                    },
+                  },
+                }}
+              />
               <Navbar />
               {children}
             </ThemeProvider>

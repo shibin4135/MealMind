@@ -43,45 +43,53 @@ const Navbar = () => {
           </Link>
 
           {/* Navigation Links */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             <SignedIn>
-              <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center gap-3 lg:gap-4">
                 <Link
                   href="/dashboard"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
+                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
                 >
                   Dashboard
                 </Link>
                 <Link
                   href="/meals"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
+                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
                 >
                   Meals
                 </Link>
                 <Link
                   href="/mealplan"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
+                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
                 >
                   Meal Plan
                 </Link>
                 <Link
                   href="/favorites"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
+                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
                 >
                   Favorites
                 </Link>
+                <Link
+                  href="/saved-meal-plans"
+                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
+                >
+                  Saved Plans
+                </Link>
+              </div>
+              <div className="flex items-center gap-2 sm:gap-3">
                 <ThemeToggle />
-                <Link href="/profle" aria-label="Go to Profile">
+                <Link href="/profle" aria-label="Go to Profile" className="shrink-0">
                   {user?.imageUrl ? (
                     <Image
                       src={user.imageUrl}
                       alt="Profile"
                       width={32}
                       height={32}
-                      className="rounded-full border border-slate-200 dark:border-slate-800"
+                      className="rounded-full border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
                     />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-800">
+                    <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
                       <span className="text-slate-600 dark:text-slate-400 text-xs font-medium">
                         {user?.firstName?.[0] || "U"}
                       </span>
@@ -89,7 +97,7 @@ const Navbar = () => {
                   )}
                 </Link>
                 <SignOutButton>
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="h-8 sm:h-9 text-xs sm:text-sm">
                     Sign Out
                   </Button>
                 </SignOutButton>
@@ -97,21 +105,21 @@ const Navbar = () => {
             </SignedIn>
 
             <SignedOut>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center gap-2 sm:gap-4">
                 <Link
                   href="/"
-                  className="text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
+                  className="text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-50 transition-colors"
                 >
                   Home
                 </Link>
                 <Link href="/subscribe">
-                  <Button variant="ghost" size="sm">
+                  <Button variant="ghost" size="sm" className="h-8 sm:h-9 text-xs sm:text-sm">
                     Pricing
                   </Button>
                 </Link>
                 <ThemeToggle />
                 <Link href="/sign-up">
-                  <Button size="sm">Sign In</Button>
+                  <Button size="sm" className="h-8 sm:h-9 text-xs sm:text-sm">Sign In</Button>
                 </Link>
               </div>
             </SignedOut>

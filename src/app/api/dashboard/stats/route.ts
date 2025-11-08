@@ -63,6 +63,20 @@ export const GET = async (req: NextRequest) => {
       categoryCounts[a] > categoryCounts[b] ? a : b, "None"
     );
 
+    // Get saved meal plans count
+    const savedMealPlansCount = await prisma.savedMealPlan.count({
+      where: {
+        userId: clerkUser.id,
+      },
+    });
+
+    // Get favorites count
+    const favoritesCount = await prisma.favorite.count({
+      where: {
+        userId: clerkUser.id,
+      },
+    });
+
     return NextResponse.json({
       today: {
         calories: todayCalories,
@@ -74,6 +88,10 @@ export const GET = async (req: NextRequest) => {
         totalMeals,
         avgCalories,
         mostSelectedCategory,
+      },
+      summary: {
+        savedMealPlans: savedMealPlansCount,
+        favoriteMeals: favoritesCount,
       },
     });
   } catch (error: any) {
