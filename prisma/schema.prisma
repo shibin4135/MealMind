@@ -14,12 +14,54 @@ datasource db {
 }
 
 model Profile {
-  id                   String   @id @default(uuid())
-  userId               String   @unique
+  id                   String     @id @default(uuid())
+  userId               String     @unique
   email                String
-  subscriptionIsActive Boolean  @default(false)
+  subscriptionIsActive Boolean    @default(false)
   subscriptionTier     String
-  stripeSubscriptionId String?  @unique
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  stripeSubscriptionId String?    @unique
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime   @updatedAt
+  favorites            Favorite[]
+  mealLogs             MealLog[]
+}
+
+model Meal {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  calories    Int
+  protein     Float
+  carbs       Float
+  fat         Float
+  category    String // Breakfast, Lunch, Dinner, Snack, Vegetarian, High Protein, Quick Meal
+  imageUrl    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  favorites   Favorite[]
+  mealLogs    MealLog[]
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String
+  mealId    String
+  createdAt DateTime @default(now())
+  profile   Profile  @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  meal      Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, mealId])
+  @@index([userId])
+}
+
+model MealLog {
+  id        String   @id @default(uuid())
+  userId    String
+  mealId    String
+  date      DateTime @default(now())
+  createdAt DateTime @default(now())
+  profile   Profile  @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  meal      Meal     @relation(fields: [mealId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
 }

@@ -51,13 +51,13 @@ const Subscribe = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50 mb-4">
             Pricing
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             Choose the plan that works best for you. All plans include unlimited AI meal plans.
           </p>
         </div>
@@ -66,18 +66,18 @@ const Subscribe = () => {
           {MealPlans.map((plan) => (
             <Card
               key={plan.amount}
-              className={`relative ${plan.isPopular ? "border-2 border-slate-900 shadow-lg" : ""}`}
+              className={`relative border-slate-200 dark:border-slate-800 ${plan.isPopular ? "border-2 border-slate-900 dark:border-slate-50 shadow-lg" : ""}`}
             >
               {plan.isPopular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-slate-900 text-white">Most Popular</Badge>
+                  <Badge className="bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900">Most Popular</Badge>
                 </div>
               )}
               <CardHeader>
                 <CardTitle className="text-2xl">{plan.name}</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-slate-900">${plan.amount}</span>
-                  <span className="text-slate-600 ml-2">/{plan.interval}</span>
+                  <span className="text-4xl font-bold text-slate-900 dark:text-slate-50">${plan.amount}</span>
+                  <span className="text-slate-600 dark:text-slate-400 ml-2">/{plan.interval}</span>
                 </div>
                 <CardDescription className="mt-4">{plan.description}</CardDescription>
               </CardHeader>
@@ -85,8 +85,8 @@ const Subscribe = () => {
                 <ul className="space-y-3">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-slate-900 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-slate-600">{feature}</span>
+                      <Check className="h-5 w-5 text-slate-900 dark:text-slate-50 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-slate-600 dark:text-slate-400">{feature}</span>
                     </li>
                   ))}
                 </ul>

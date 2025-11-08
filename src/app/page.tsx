@@ -2,30 +2,36 @@ import Link from "next/link";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { UtensilsCrossed, TrendingUp, Clock, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 mb-6 leading-tight">
-            AI-Powered Meal Planning
+          <div className="mb-8 flex justify-center">
+            <div className="w-20 h-20 rounded-2xl bg-slate-900 dark:bg-slate-50 flex items-center justify-center">
+              <UtensilsCrossed className="h-10 w-10 text-white dark:text-slate-900" />
+            </div>
+          </div>
+          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-slate-50 mb-6 leading-tight">
+            MealMind
             <br />
-            <span className="text-slate-600">Tailored to You</span>
+            <span className="text-slate-600 dark:text-slate-400">Plan smarter. Eat better.</span>
           </h1>
-          <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
-            Get personalized meal plans powered by AI. Save time, eat better, and achieve your health goals.
+          <p className="text-xl text-slate-600 dark:text-slate-400 mb-10 max-w-2xl mx-auto">
+            Track meals, monitor macros, and stay consistent with your health goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/mealplan">
+            <Link href="/meals">
               <Button size="lg" className="w-full sm:w-auto">
-                Get Started
+                View Meals
               </Button>
             </Link>
-            <Link href="/subscribe">
+            <Link href="/dashboard">
               <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                View Pricing
+                Dashboard
               </Button>
             </Link>
           </div>
@@ -33,22 +39,22 @@ export default function Home() {
       </section>
 
       {/* How it Works */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-slate-950">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-4">
               How it Works
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Three simple steps to get your personalized meal plan
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
+            <Card className="border-slate-200 dark:border-slate-800">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-slate-900">1</span>
+                <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                  <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">1</span>
                 </div>
                 <CardTitle>Create Account</CardTitle>
                 <CardDescription>
@@ -57,10 +63,10 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card>
+            <Card className="border-slate-200 dark:border-slate-800">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-slate-900">2</span>
+                <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                  <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">2</span>
                 </div>
                 <CardTitle>Set Preferences</CardTitle>
                 <CardDescription>
@@ -69,10 +75,10 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card>
+            <Card className="border-slate-200 dark:border-slate-800">
               <CardHeader>
-                <div className="w-12 h-12 rounded-lg bg-slate-100 flex items-center justify-center mb-4">
-                  <span className="text-2xl font-bold text-slate-900">3</span>
+                <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                  <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">3</span>
                 </div>
                 <CardTitle>Get Your Plans</CardTitle>
                 <CardDescription>
@@ -85,13 +91,13 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Why Choose Our AI Meal Planner?
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+              Why Choose MealMind?
             </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
               Smart features to make your meal planning effortless
             </p>
           </div>
@@ -99,20 +105,26 @@ export default function Home() {
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
+                icon: Sparkles,
                 title: "Personalized Plans",
                 description: "Get meal plans tailored to your dietary preferences and restrictions",
               },
               {
-                title: "Smart AI Technology",
-                description: "Leverage advanced AI to create balanced and nutritious meal combinations",
+                icon: TrendingUp,
+                title: "Track Progress",
+                description: "Monitor your daily calories and macros with our intuitive dashboard",
               },
               {
+                icon: Clock,
                 title: "Time-Saving",
                 description: "Save hours of meal planning with instant AI-generated suggestions",
               },
             ].map((feature, index) => (
-              <Card key={index}>
+              <Card key={index} className="border-slate-200 dark:border-slate-800">
                 <CardHeader>
+                  <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                    <feature.icon className="h-5 w-5 text-slate-900 dark:text-slate-50" />
+                  </div>
                   <CardTitle className="text-xl">{feature.title}</CardTitle>
                   <CardDescription>{feature.description}</CardDescription>
                 </CardHeader>

@@ -151,15 +151,15 @@ const Profile = () => {
 
   if (!isLoaded)
     return (
-      <div className="flex justify-center items-center h-screen bg-slate-50">
+      <div className="flex justify-center items-center h-screen bg-slate-50 dark:bg-slate-950">
         <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
       </div>
     );
 
   if (!isSignedIn)
     return (
-      <div className="flex justify-center items-center h-screen bg-slate-50">
-        <Card className="max-w-md">
+      <div className="flex justify-center items-center h-screen bg-slate-50 dark:bg-slate-950">
+        <Card className="max-w-md border-slate-200 dark:border-slate-800">
           <CardHeader>
             <CardTitle>Sign In Required</CardTitle>
             <CardDescription>Please sign in to view your profile.</CardDescription>
@@ -175,10 +175,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Profile Header */}
-        <Card>
+        <Card className="border-slate-200 dark:border-slate-800">
           <CardHeader>
             <div className="flex items-center gap-4">
               {user?.imageUrl ? (
@@ -187,11 +187,11 @@ const Profile = () => {
                   alt="Profile"
                   width={80}
                   height={80}
-                  className="rounded-full border-2 border-slate-200"
+                  className="rounded-full border-2 border-slate-200 dark:border-slate-800"
                 />
               ) : (
-                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center border-2 border-slate-200">
-                  <span className="text-2xl font-semibold text-slate-600">
+                <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-2 border-slate-200 dark:border-slate-800">
+                  <span className="text-2xl font-semibold text-slate-600 dark:text-slate-400">
                     {user?.firstName?.[0] || "U"}
                   </span>
                 </div>
@@ -207,7 +207,7 @@ const Profile = () => {
         </Card>
 
         {/* Subscription Details */}
-        <Card>
+        <Card className="border-slate-200 dark:border-slate-800">
           <CardHeader>
             <CardTitle>Subscription Details</CardTitle>
             <CardDescription>Manage your subscription and billing</CardDescription>
@@ -217,8 +217,8 @@ const Profile = () => {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-slate-600">Current Plan</p>
-                    <p className="text-xl font-semibold text-slate-900 mt-1">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Current Plan</p>
+                    <p className="text-xl font-semibold text-slate-900 dark:text-slate-50 mt-1">
                       {currentPlan.name}
                     </p>
                   </div>
@@ -229,15 +229,15 @@ const Profile = () => {
                 <Separator />
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm text-slate-600">Amount</p>
-                    <p className="text-lg font-semibold text-slate-900 mt-1">
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Amount</p>
+                    <p className="text-lg font-semibold text-slate-900 dark:text-slate-50 mt-1">
                       ${currentPlan.amount} / {currentPlan.interval}
                     </p>
                   </div>
                   {data?.subscription?.stripeSubscriptionId && (
                     <div>
-                      <p className="text-sm text-slate-600">Subscription ID</p>
-                      <p className="text-sm font-mono text-slate-900 mt-1 truncate">
+                      <p className="text-sm text-slate-600 dark:text-slate-400">Subscription ID</p>
+                      <p className="text-sm font-mono text-slate-900 dark:text-slate-50 mt-1 truncate">
                         {data.subscription.stripeSubscriptionId}
                       </p>
                     </div>
@@ -246,7 +246,7 @@ const Profile = () => {
               </div>
             ) : (
               <div className="text-center py-8">
-                <p className="text-slate-600">No active subscription</p>
+                <p className="text-slate-600 dark:text-slate-400">No active subscription</p>
                 <Button className="mt-4" asChild>
                   <a href="/subscribe">View Plans</a>
                 </Button>
@@ -257,14 +257,14 @@ const Profile = () => {
 
         {/* Change Plan */}
         {currentPlan && (
-          <Card>
+          <Card className="border-slate-200 dark:border-slate-800">
             <CardHeader>
               <CardTitle>Change Subscription Plan</CardTitle>
               <CardDescription>Upgrade or downgrade your plan</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-slate-900">Select Plan</label>
+                <label className="text-sm font-medium text-slate-900 dark:text-slate-50">Select Plan</label>
                 <Select value={selectedOption} onValueChange={setSelectedOption}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a plan" />
@@ -298,9 +298,9 @@ const Profile = () => {
 
         {/* Cancel Subscription */}
         {currentPlan && data?.isSubscribed && (
-          <Card className="border-red-200">
+          <Card className="border-red-200 dark:border-red-900">
             <CardHeader>
-              <CardTitle className="text-red-900">Cancel Subscription</CardTitle>
+              <CardTitle className="text-red-900 dark:text-red-400">Cancel Subscription</CardTitle>
               <CardDescription>
                 Cancel your subscription at any time. You'll continue to have access until the end of your billing period.
               </CardDescription>

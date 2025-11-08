@@ -74,11 +74,11 @@ export default async function SuccessPage({
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-      <Card className="max-w-md w-full text-center">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center px-4 sm:px-6 lg:px-8">
+      <Card className="max-w-md w-full text-center border-slate-200 dark:border-slate-800">
         <CardHeader className="pb-4">
-          <div className="mx-auto w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-4">
-            <CheckCircle2 className="h-8 w-8 text-green-600" />
+          <div className="mx-auto w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
+            <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400" />
           </div>
           <CardTitle className="text-2xl">Payment Successful!</CardTitle>
           <CardDescription className="text-base mt-2">

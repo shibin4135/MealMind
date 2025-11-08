@@ -198,21 +198,21 @@ const MealPlan = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 py-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50 mb-4">
             AI Meal Plan Generator
           </h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
             Create personalized weekly meal plans tailored to your dietary preferences and goals
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Form Card */}
-          <Card className="lg:col-span-1 shadow-lg">
+          <Card className="lg:col-span-1 shadow-lg border-slate-200 dark:border-slate-800">
             <CardHeader>
               <CardTitle className="text-xl">Your Preferences</CardTitle>
               <CardDescription>
@@ -274,12 +274,12 @@ const MealPlan = () => {
                   />
                 </div>
 
-                <div className="flex items-center space-x-3 p-3 bg-slate-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg">
                   <input
                     type="checkbox"
                     id="snacks"
                     name="snacks"
-                    className="h-4 w-4 rounded border-slate-300 text-slate-900 focus:ring-2 focus:ring-slate-950"
+                    className="h-4 w-4 rounded border-slate-300 dark:border-slate-700 text-slate-900 dark:text-slate-50 focus:ring-2 focus:ring-slate-950 dark:focus:ring-slate-50"
                   />
                   <Label htmlFor="snacks" className="cursor-pointer text-sm font-medium">
                     Include snacks in the meal plan
@@ -309,7 +309,7 @@ const MealPlan = () => {
 
           {/* Results Area */}
           <div className="lg:col-span-2">
-            <Card className="min-h-[500px] shadow-lg">
+            <Card className="min-h-[500px] shadow-lg border-slate-200 dark:border-slate-800">
               <CardHeader>
                 <CardTitle className="text-2xl">Your Weekly Meal Plan</CardTitle>
                 <CardDescription>
@@ -322,13 +322,13 @@ const MealPlan = () => {
               <CardContent>
                 {!data?.mealPlan && !isPending && !error && (
                   <div className="flex flex-col items-center justify-center h-96 text-center">
-                    <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+                    <div className="w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                       <Sparkles className="h-10 w-10 text-slate-400" />
                     </div>
-                    <p className="text-lg font-medium text-slate-900 mb-2">
+                    <p className="text-lg font-medium text-slate-900 dark:text-slate-50 mb-2">
                       Ready to get started?
                     </p>
-                    <p className="text-slate-600 max-w-md">
+                    <p className="text-slate-600 dark:text-slate-400 max-w-md">
                       Fill out the form on the left with your dietary preferences and click "Generate Meal Plan" to create your personalized weekly meal plan.
                     </p>
                   </div>
@@ -337,10 +337,10 @@ const MealPlan = () => {
                 {isPending && (
                   <div className="flex flex-col items-center justify-center h-96">
                     <Loader2 className="h-12 w-12 animate-spin text-slate-400 mb-4" />
-                    <p className="text-lg font-medium text-slate-900 mb-2">
+                    <p className="text-lg font-medium text-slate-900 dark:text-slate-50 mb-2">
                       Generating your meal plan...
                     </p>
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       This may take a few moments
                     </p>
                   </div>
@@ -348,16 +348,16 @@ const MealPlan = () => {
 
                 {error && (
                   <div className="flex flex-col items-center justify-center h-96 text-center">
-                    <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mb-4">
-                      <AlertCircle className="h-10 w-10 text-red-600" />
+                    <div className="w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
+                      <AlertCircle className="h-10 w-10 text-red-600 dark:text-red-400" />
                     </div>
-                    <p className="text-lg font-semibold text-slate-900 mb-2">
+                    <p className="text-lg font-semibold text-slate-900 dark:text-slate-50 mb-2">
                       {error.code === "RATE_LIMIT_EXCEEDED" 
                         ? "Service Busy" 
                         : "Something went wrong"
                       }
                     </p>
-                    <p className="text-slate-600 max-w-md mb-4">
+                    <p className="text-slate-600 dark:text-slate-400 max-w-md mb-4">
                       {error.message || "Please try again in a few moments."}
                     </p>
                     <Button 
@@ -375,27 +375,27 @@ const MealPlan = () => {
                       {Object.keys(data.mealPlan).map((key) => {
                         const day = data.mealPlan![key as dayType[number]];
                         return (
-                          <Card key={key} className="border-slate-200 hover:shadow-md transition-shadow">
+                          <Card key={key} className="border-slate-200 dark:border-slate-800 hover:shadow-md transition-shadow">
                             <CardHeader className="pb-3">
-                              <CardTitle className="text-lg font-bold text-slate-900">{key}</CardTitle>
+                              <CardTitle className="text-lg font-bold text-slate-900 dark:text-slate-50">{key}</CardTitle>
                             </CardHeader>
                             <CardContent className="space-y-3">
                               <div className="space-y-1">
-                                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Breakfast</span>
-                                <p className="text-sm text-slate-700 leading-relaxed">{day.Breakfast}</p>
+                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Breakfast</span>
+                                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{day.Breakfast}</p>
                               </div>
                               <div className="space-y-1">
-                                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Lunch</span>
-                                <p className="text-sm text-slate-700 leading-relaxed">{day.Lunch}</p>
+                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Lunch</span>
+                                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{day.Lunch}</p>
                               </div>
                               <div className="space-y-1">
-                                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Dinner</span>
-                                <p className="text-sm text-slate-700 leading-relaxed">{day.Dinner}</p>
+                                <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Dinner</span>
+                                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{day.Dinner}</p>
                               </div>
                               {day.Snacks && (
                                 <div className="space-y-1">
-                                  <span className="text-xs font-semibold text-slate-500 uppercase tracking-wide">Snacks</span>
-                                  <p className="text-sm text-slate-700 leading-relaxed">{day.Snacks}</p>
+                                  <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide">Snacks</span>
+                                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{day.Snacks}</p>
                                 </div>
                               )}
                             </CardContent>
