@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/config";
 
 // GET - Get all meals with optional filters
@@ -28,7 +29,28 @@ export const GET = async (req: NextRequest) => {
       },
     });
 
-    return NextResponse.json({ meals });
+    // Get user's favorite meal IDs if authenticated
+    let favoriteMealIds: string[] = [];
+    try {
+      const clerkUser = await currentUser();
+      if (clerkUser) {
+        const favorites = await prisma.favorite.findMany({
+          where: { userId: clerkUser.id },
+          select: { mealId: true },
+        });
+        favoriteMealIds = favorites.map((f) => f.mealId);
+      }
+    } catch (error) {
+      // If user check fails, continue without favorite status
+    }
+
+    // Add favorite status to each meal
+    const mealsWithFavorites = meals.map((meal) => ({
+      ...meal,
+      isFavorite: favoriteMealIds.includes(meal.id),
+    }));
+
+    return NextResponse.json({ meals: mealsWithFavorites });
   } catch (error: any) {
     console.error("Error fetching meals:", error);
     return NextResponse.json(

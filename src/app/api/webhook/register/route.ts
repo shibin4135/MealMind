@@ -69,25 +69,26 @@ async function handleCheckoutSessionCompleted(
   }
 
   try {
-    // First check if the profile exists
-    const existingProfile = await prisma.profile.findUnique({
-      where: { userId },
-    });
+    const emailFromStripe =
+      (session as any).customer_email ||
+      (session as any).customer_details?.email ||
+      "unknown@placeholder.local";
 
-    console.log("Existing profile:", existingProfile);
-
-    await prisma.profile.update({
+    // Create the profile if it doesn't exist; otherwise update it
+    const updatedProfile = await prisma.profile.upsert({
       where: { userId },
-      data: {
+      update: {
         stripeSubscriptionId: subscriptionId,
         subscriptionIsActive: true,
-        subscriptionTier: session.metadata?.planType || "premium", // Set a default if planType is missing
+        subscriptionTier: session.metadata?.planType || "premium",
       },
-    });
-
-    // Verify the update
-    const updatedProfile = await prisma.profile.findUnique({
-      where: { userId },
+      create: {
+        userId,
+        email: emailFromStripe,
+        stripeSubscriptionId: subscriptionId,
+        subscriptionIsActive: true,
+        subscriptionTier: session.metadata?.planType || "premium",
+      },
     });
 
     console.log("Updated profile:", updatedProfile);
@@ -119,7 +120,8 @@ async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
       return;
     }
 
-    await prisma.profile.update({
+    // Use updateMany to avoid throwing if profile doesn't exist
+    await prisma.profile.updateMany({
       where: { userId: userId },
       data: {
         subscriptionIsActive: false,
@@ -155,7 +157,8 @@ async function handleCustomerSubscriptionDeleted(
       return;
     }
 
-    await prisma.profile.update({
+    // Use updateMany to avoid throwing if profile doesn't exist
+    await prisma.profile.updateMany({
       where: { userId: userId },
       data: {
         subscriptionIsActive: false,

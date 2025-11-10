@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -12,8 +11,8 @@ import { Loader2, Heart, Lock } from "lucide-react";
 import Link from "next/link";
 
 const Favorites = () => {
-  const { user, isLoaded, isSignedIn } = useUser();
-  const router = useRouter();
+  const { isLoaded, isSignedIn } = useUser();
+  const queryClient = useQueryClient();
 
   const { data: favoritesData, isLoading } = useQuery({
     queryKey: ["favorites"],
@@ -64,26 +63,24 @@ const Favorites = () => {
   }
 
   const favorites = favoritesData?.favorites || [];
-  const meals = favorites.map((f: any) => f.meal);
+  const meals = favorites.map((f: any) => ({ ...f.meal, isFavorite: true }));
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 sm:mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
-            Favorite Meals
-          </h1>
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-2">Favorite Meals</h1>
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Your saved meals for quick access
           </p>
         </div>
 
         {/* Content */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+              <Card key={i}>
                 <Skeleton className="h-48 w-full rounded-t-lg" />
                 <CardHeader>
                   <Skeleton className="h-5 w-3/4 mb-2" />
@@ -97,28 +94,33 @@ const Favorites = () => {
             ))}
           </div>
         ) : meals.length === 0 ? (
-          <Card className="border-slate-200 dark:border-slate-800 max-w-2xl mx-auto bg-white dark:bg-slate-900">
+          <Card className="max-w-2xl mx-auto">
             <CardHeader className="text-center pb-4">
-              <div className="mx-auto w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
-                <Heart className="h-8 w-8 sm:h-10 sm:w-10 text-slate-400 dark:text-slate-500" />
+              <div className="mx-auto w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
+                <Heart className="h-10 w-10 text-slate-400 dark:text-slate-500" />
               </div>
-              <CardTitle className="text-xl sm:text-2xl">No favorites yet</CardTitle>
-              <CardDescription className="text-sm sm:text-base mt-2">
+              <CardTitle className="text-2xl">No favorites yet</CardTitle>
+              <CardDescription className="text-base mt-2">
                 Start exploring meals and save your favorites for easy access later.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex justify-center pb-6">
-              <Button asChild size="lg" className="h-10 sm:h-11">
+              <Button asChild size="lg">
                 <Link href="/meals">Browse Meals</Link>
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {meals.map((meal: any) => (
               <MealCard
                 key={meal.id}
                 meal={meal}
+                isFavorite={true}
+                onFavoriteChange={() => {
+                  queryClient.invalidateQueries({ queryKey: ["favorites"] });
+                  queryClient.invalidateQueries({ queryKey: ["meals"] });
+                }}
               />
             ))}
           </div>
@@ -129,4 +131,3 @@ const Favorites = () => {
 };
 
 export default Favorites;
-

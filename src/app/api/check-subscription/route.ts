@@ -40,6 +40,16 @@ export const GET = async (req: NextRequest) => {
     });
   } catch (error: any) {
     console.error("Error fetching subscription details:", error);
+    
+    // Handle case where Profile table doesn't exist (database not migrated)
+    if (error.code === "P2021" || error.message?.includes("does not exist")) {
+      console.warn("Profile table not found - database may need migrations");
+      return NextResponse.json({ 
+        isSubscribed: false,
+        subscription: null,
+      });
+    }
+    
     return NextResponse.json(
       { 
         message: error.message || "Failed to fetch subscription details. Please try again.",

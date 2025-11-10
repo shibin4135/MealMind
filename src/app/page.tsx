@@ -6,7 +6,15 @@ import { UtensilsCrossed, TrendingUp, Clock, Sparkles } from "lucide-react";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+      {/* Background gradient mesh */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 opacity-60 dark:opacity-50 [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
+      >
+        <div className="absolute -top-24 -left-24 h-[32rem] w-[32rem] rounded-full bg-[conic-gradient(at_top_left,_var(--tw-gradient-stops))] from-indigo-300 via-sky-300 to-purple-300 blur-3xl dark:from-indigo-900/40 dark:via-sky-900/40 dark:to-purple-900/40" />
+        <div className="absolute -bottom-24 -right-24 h-[28rem] w-[28rem] rounded-full bg-[conic-gradient(at_bottom_right,_var(--tw-gradient-stops))] from-rose-300 via-amber-300 to-emerald-300 blur-3xl dark:from-rose-900/40 dark:via-amber-900/40 dark:to-emerald-900/40" />
+      </div>
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
@@ -25,12 +33,12 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/meals">
-              <Button size="lg" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow">
                 View Meals
               </Button>
             </Link>
             <Link href="/dashboard">
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="w-full sm:w-auto shadow-sm hover:shadow-md transition-shadow">
                 Dashboard
               </Button>
             </Link>
@@ -51,7 +59,7 @@ export default function Home() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-slate-200 dark:border-slate-800">
+            <Card className="border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 transition-transform hover:-translate-y-0.5 hover:shadow-sm">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                   <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">1</span>
@@ -63,7 +71,7 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card className="border-slate-200 dark:border-slate-800">
+            <Card className="border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 transition-transform hover:-translate-y-0.5 hover:shadow-sm">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                   <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">2</span>
@@ -75,7 +83,7 @@ export default function Home() {
               </CardHeader>
             </Card>
 
-            <Card className="border-slate-200 dark:border-slate-800">
+            <Card className="border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 transition-transform hover:-translate-y-0.5 hover:shadow-sm">
               <CardHeader>
                 <div className="w-12 h-12 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                   <span className="text-2xl font-bold text-slate-900 dark:text-slate-50">3</span>
@@ -120,7 +128,7 @@ export default function Home() {
                 description: "Save hours of meal planning with instant AI-generated suggestions",
               },
             ].map((feature, index) => (
-              <Card key={index} className="border-slate-200 dark:border-slate-800">
+              <Card key={index} className="border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-slate-900/60 transition-transform hover:-translate-y-0.5 hover:shadow-sm">
                 <CardHeader>
                   <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
                     <feature.icon className="h-5 w-5 text-slate-900 dark:text-slate-50" />

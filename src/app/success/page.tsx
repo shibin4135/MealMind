@@ -27,12 +27,24 @@ async function updateUserProfile(userId: string, session: any) {
       return;
     }
 
-    await prisma.profile.update({
+    const emailFromStripe =
+      (session as any).customer_email ||
+      (session as any).customer_details?.email ||
+      "unknown@placeholder.local";
+
+    await prisma.profile.upsert({
       where: { userId },
-      data: {
+      update: {
         stripeSubscriptionId: subscriptionId,
         subscriptionIsActive: true,
-        subscriptionTier: session.metadata?.planType || 'premium',
+        subscriptionTier: session.metadata?.planType || "premium",
+      },
+      create: {
+        userId,
+        email: emailFromStripe,
+        stripeSubscriptionId: subscriptionId,
+        subscriptionIsActive: true,
+        subscriptionTier: session.metadata?.planType || "premium",
       },
     });
 
