@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useUser } from "@clerk/nextjs";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -48,71 +47,71 @@ const Meals = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-foreground transition-colors duration-300">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-70 dark:opacity-40"
-      >
-        <div className="absolute -top-40 -left-32 h-[26rem] w-[26rem] rounded-full bg-gradient-to-br from-emerald-500/30 to-teal-500/30 blur-3xl" />
-        <div className="absolute top-1/2 -right-40 h-[24rem] w-[24rem] rounded-full bg-gradient-to-br from-violet-500/25 to-purple-500/25 blur-3xl" />
-        <div className="absolute -bottom-32 left-1/3 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-cyan-500/25 to-blue-500/25 blur-3xl" />
-      </div>
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
+      <div className="max-w-7xl mx-auto space-y-12">
         {/* Header */}
-        <div className="mb-12 text-center md:text-left">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
+        <div className="text-center md:text-left space-y-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold">
             <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
               Browse Meals
             </span>
           </h1>
-          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl">
+          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-medium max-w-2xl">
             Discover delicious meals, filter by your preferences, and add favorites to build your perfect meal plan.
           </p>
         </div>
 
         {/* Search and Filters */}
-        <div className="mb-12 space-y-6">
-          <div className="relative group max-w-2xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
-            <Input
-              placeholder="Search meals..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-12 text-base border-2 border-input focus-visible:ring-0 focus:border-primary rounded-xl shadow-md focus:shadow-lg transition-all duration-200 bg-card/80 backdrop-blur"
-            />
-          </div>
+        <Card className="border-0 shadow-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+          <CardContent className="py-8 space-y-6">
+            <div className="relative max-w-2xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 dark:text-slate-500" />
+              <Input
+                placeholder="Search meals..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 h-12 text-base border-2 border-slate-200 dark:border-slate-800 focus-visible:ring-0 focus:border-emerald-500 dark:focus:border-emerald-400 rounded-xl shadow-sm focus:shadow-md transition-all duration-200 bg-white/90 dark:bg-slate-900/80"
+              />
+            </div>
 
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
-              <Badge
-                key={category}
-                variant={selectedCategory === category ? "default" : "outline"}
-                className="cursor-pointer px-4 py-2 text-sm font-semibold transition-all duration-200 transform hover:scale-105 rounded-lg shadow-md hover:shadow-lg"
-                onClick={() =>
-                  setSelectedCategory(selectedCategory === category ? null : category)
-                }
-              >
-                {category}
-              </Badge>
-            ))}
-            {selectedCategory && (
-              <Badge
-                variant="outline"
-                className="cursor-pointer px-4 py-2 text-sm font-semibold transition-all duration-200 transform hover:scale-105 rounded-lg shadow-md hover:shadow-lg hover:border-primary"
-                onClick={() => setSelectedCategory(null)}
-              >
-                Clear
-              </Badge>
-            )}
-          </div>
-        </div>
+            <div className="flex flex-wrap gap-3">
+              {categories.map((category) => {
+                const isSelected = selectedCategory === category;
+                return (
+                  <Badge
+                    key={category}
+                    variant={isSelected ? "default" : "outline"}
+                    className={`cursor-pointer px-5 py-2 text-sm font-semibold transition-all duration-200 rounded-full border-2 ${
+                      isSelected
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg hover:from-emerald-600 hover:to-teal-600"
+                        : "bg-white/80 dark:bg-slate-900/70 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-emerald-400 dark:hover:border-emerald-400 hover:text-slate-900 dark:hover:text-slate-100"
+                    }`}
+                    onClick={() =>
+                      setSelectedCategory(isSelected ? null : category)
+                    }
+                  >
+                    {category}
+                  </Badge>
+                );
+              })}
+              {selectedCategory && (
+                <Badge
+                  variant="outline"
+                  className="cursor-pointer px-5 py-2 text-sm font-semibold transition-all duration-200 rounded-full border-2 bg-white/80 dark:bg-slate-900/70 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-red-300 dark:hover:border-red-500 hover:text-red-500 dark:hover:text-red-400"
+                  onClick={() => setSelectedCategory(null)}
+                >
+                  Clear filters
+                </Badge>
+              )}
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Meals Grid */}
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i} className="border-0 shadow-xl rounded-2xl bg-card/90 backdrop-blur">
+              <Card key={i} className="border-0 shadow-xl rounded-2xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
                 <Skeleton className="h-48 w-full rounded-t-2xl" />
                 <CardHeader className="space-y-4">
                   <Skeleton className="h-5 w-3/4 rounded-lg" />
@@ -126,22 +125,26 @@ const Meals = () => {
             ))}
           </div>
         ) : meals.length === 0 ? (
-          <div className="max-w-2xl mx-auto text-center py-20">
-            <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center mb-6 shadow-xl text-4xl">
-              🍽️
-            </div>
-            <h3 className="text-2xl font-bold mb-2 text-foreground">No meals found</h3>
-            <p className="text-base text-muted-foreground mb-8 max-w-md mx-auto">
-              {searchQuery || selectedCategory
-                ? "Try adjusting your search or filters"
-                : "No meals available yet. Generate sample meals to get started."}
-            </p>
-            {!searchQuery && !selectedCategory && (
-              <Button onClick={handleSeedMeals} size="lg" className="font-semibold shadow-lg hover:shadow-xl">
-                Generate Sample Meals
-              </Button>
-            )}
-          </div>
+          <Card className="max-w-3xl mx-auto border-0 shadow-xl bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm">
+            <CardContent className="py-16 text-center space-y-6">
+              <div className="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center shadow-xl text-4xl">
+                🍽️
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50">No meals found</h3>
+                <p className="text-base text-slate-600 dark:text-slate-300 max-w-md mx-auto">
+                  {searchQuery || selectedCategory
+                    ? "Try adjusting your search or filters to discover more options."
+                    : "No meals available yet. Generate sample meals to get started."}
+                </p>
+              </div>
+              {!searchQuery && !selectedCategory && (
+                <Button onClick={handleSeedMeals} size="lg" className="font-semibold shadow-lg hover:shadow-xl">
+                  Generate Sample Meals
+                </Button>
+              )}
+            </CardContent>
+          </Card>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {meals.map((meal: any) => (
