@@ -12,7 +12,6 @@ import Link from "next/link";
 import React from "react";
 import Skeleton from "react-loading-skeleton";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 const Navbar = () => {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -83,7 +82,6 @@ const Navbar = () => {
                 </Link>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <ThemeToggle />
                 <Link href="/profle" aria-label="Go to Profile" className="shrink-0 group">
                   {user?.imageUrl ? (
                     <div className="relative">
@@ -128,7 +126,6 @@ const Navbar = () => {
                     Pricing
                   </Button>
                 </Link>
-                <ThemeToggle />
                 <Link href="/sign-up">
                   <Button size="sm" className="h-9 text-xs sm:text-sm bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
                     Sign In

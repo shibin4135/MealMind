@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Heart, Plus } from "lucide-react";
+import { CalendarPlus, ChevronDown, ChevronUp, Heart, Plus } from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
@@ -23,9 +23,17 @@ interface MealCardProps {
   };
   isFavorite?: boolean;
   onFavoriteChange?: (isFavorite: boolean) => void;
+  onAddToSchedule?: (meal: MealCardProps["meal"]) => void;
+  showScheduleAction?: boolean;
 }
 
-export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange }: MealCardProps) {
+export function MealCard({
+  meal,
+  isFavorite: initialIsFavorite,
+  onFavoriteChange,
+  onAddToSchedule,
+  showScheduleAction = false,
+}: MealCardProps) {
   const { isSignedIn } = useUser();
   const queryClient = useQueryClient();
   const [isExpanded, setIsExpanded] = useState(false);
@@ -115,8 +123,13 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
     logMealMutation.mutate();
   };
 
+  const handleAddToScheduleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddToSchedule?.(meal);
+  };
+
   return (
-    <Card className="group relative border-0 shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm overflow-hidden transform hover:-translate-y-2">
+    <Card className="group relative border border-border bg-card/90 shadow-xl hover:shadow-2xl transition-all duration-500 backdrop-blur-sm overflow-hidden transform hover:-translate-y-2">
       {/* Image */}
       <div className="relative h-52 w-full overflow-hidden">
         {meal.imageUrl ? (
@@ -138,7 +151,7 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
 
       <CardHeader className="pb-3 relative z-10">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-xl font-bold line-clamp-2 flex-1 text-slate-900 dark:text-slate-50 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
+          <CardTitle className="flex-1 text-xl font-semibold text-foreground transition-colors duration-300 group-hover:text-primary line-clamp-2">
             {meal.name}
           </CardTitle>
         </div>
@@ -146,25 +159,33 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
 
       <CardContent className="space-y-4 relative z-10">
         {/* Macros Row */}
-        <div className="flex items-center gap-3 text-sm border-b-2 border-slate-100 dark:border-slate-800 pb-4">
-          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">
-            <div className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-1 uppercase tracking-wide">Calories</div>
-            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.calories}</div>
+        <div className="flex items-center gap-3 text-sm border-b border-border pb-4">
+          <div className="flex-1 rounded-lg bg-muted/40 p-3 text-center">
+            <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Calories
+            </div>
+            <div className="text-lg font-semibold text-foreground">{meal.calories}</div>
           </div>
-          <div className="w-px h-10 bg-slate-200 dark:bg-slate-800" />
-          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30">
-            <div className="text-xs font-semibold text-violet-600 dark:text-violet-400 mb-1 uppercase tracking-wide">Protein</div>
-            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.protein}g</div>
+          <div className="h-10 w-px bg-border" />
+          <div className="flex-1 rounded-lg bg-muted/40 p-3 text-center">
+            <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Protein
+            </div>
+            <div className="text-lg font-semibold text-foreground">{meal.protein}g</div>
           </div>
-          <div className="w-px h-10 bg-slate-200 dark:bg-slate-800" />
-          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30">
-            <div className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 mb-1 uppercase tracking-wide">Carbs</div>
-            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.carbs}g</div>
+          <div className="h-10 w-px bg-border" />
+          <div className="flex-1 rounded-lg bg-muted/40 p-3 text-center">
+            <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Carbs
+            </div>
+            <div className="text-lg font-semibold text-foreground">{meal.carbs}g</div>
           </div>
-          <div className="w-px h-10 bg-slate-200 dark:bg-slate-800" />
-          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30">
-            <div className="text-xs font-semibold text-pink-600 dark:text-pink-400 mb-1 uppercase tracking-wide">Fat</div>
-            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.fat}g</div>
+          <div className="h-10 w-px bg-border" />
+          <div className="flex-1 rounded-lg bg-muted/40 p-3 text-center">
+            <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Fat
+            </div>
+            <div className="text-lg font-semibold text-foreground">{meal.fat}g</div>
           </div>
         </div>
 
@@ -173,7 +194,7 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
           <div>
             <button
               onClick={() => setIsExpanded(!isExpanded)}
-              className="w-full flex items-center justify-between text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100 transition-colors"
+              className="flex w-full items-center justify-between text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <span>Ingredients</span>
               {isExpanded ? (
@@ -187,7 +208,7 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
                 {ingredients.map((ingredient, index) => (
                   <li
                     key={index}
-                    className="text-sm text-slate-600 dark:text-slate-400 list-disc"
+                    className="list-disc text-sm text-muted-foreground"
                   >
                     {ingredient}
                   </li>
@@ -219,13 +240,24 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
             disabled={favoriteMutation.isPending || !isSignedIn}
             variant={isFavorite ? "default" : "outline"}
             size="sm"
-            className={`px-4 shadow-md hover:shadow-lg ${isFavorite ? "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600" : ""}`}
+            className={isFavorite ? "px-4 shadow-md hover:shadow-lg" : "px-4 shadow-md hover:shadow-lg"}
           >
             <Heart
               className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
             />
           </Button>
         </div>
+        {showScheduleAction && (
+          <Button
+            onClick={handleAddToScheduleClick}
+            variant="secondary"
+            size="sm"
+            className="mt-3 w-full rounded-lg border border-primary/30 bg-primary/10 font-semibold text-primary transition-all duration-200 hover:bg-primary/20"
+          >
+            <CalendarPlus className="mr-2 h-4 w-4" />
+            Add to Schedule
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

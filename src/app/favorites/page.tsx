@@ -6,6 +6,7 @@ import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 import { MealCard } from "@/components/meal-card";
 import { Loader2, Heart, Lock } from "lucide-react";
 import Link from "next/link";
@@ -26,32 +27,32 @@ const Favorites = () => {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+      <div className="min-h-screen bg-background flex items-center justify-center pt-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!isSignedIn) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-background text-foreground pt-20 px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-2xl mx-auto">
-          <Card className="border-amber-200 dark:border-amber-900 bg-amber-50/50 dark:bg-amber-950/50">
+          <Card className="border border-border bg-muted/10">
             <CardHeader className="text-center">
-              <div className="mx-auto w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-900 flex items-center justify-center mb-4">
-                <Lock className="h-8 w-8 text-amber-600 dark:text-amber-400" />
+              <div className="mx-auto w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                <Lock className="h-8 w-8 text-muted-foreground" />
               </div>
-              <CardTitle className="text-2xl">Sign In Required</CardTitle>
-              <CardDescription className="text-base mt-2">
+              <CardTitle className="text-2xl text-foreground">Sign In Required</CardTitle>
+              <CardDescription className="text-base mt-2 text-muted-foreground">
                 You need to be signed in to view your favorite meals.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button asChild size="lg">
+                <Button asChild size="lg" className="rounded-xl">
                   <Link href="/sign-up">Sign In</Link>
                 </Button>
-                <Button asChild variant="outline" size="lg">
+                <Button asChild variant="outline" size="lg" className="rounded-xl">
                   <Link href="/">Go to Home</Link>
                 </Button>
               </div>
@@ -66,52 +67,65 @@ const Favorites = () => {
   const meals = favorites.map((f: any) => ({ ...f.meal, isFavorite: true }));
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Favorite Meals</h1>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
-            Your saved meals for quick access
-          </p>
-        </div>
+        <header className="space-y-4 text-center md:text-left">
+          <div className="inline-flex items-center rounded-full bg-muted/40 px-4 py-1 text-sm font-medium text-muted-foreground">
+            Favorites
+          </div>
+          <div className="space-y-3">
+            <h1 className="text-3xl sm:text-4xl font-semibold">
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                Favorite Meals
+              </span>
+            </h1>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl">
+              Your saved meals for quick access
+            </p>
+          </div>
+        </header>
+
+        <Separator className="bg-border" />
 
         {/* Content */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {[1, 2, 3, 4, 5, 6].map((i) => (
-              <Card key={i}>
-                <Skeleton className="h-48 w-full rounded-t-lg" />
-                <CardHeader>
-                  <Skeleton className="h-5 w-3/4 mb-2" />
-                  <Skeleton className="h-4 w-1/2" />
+              <Card key={i} className="border border-border bg-muted/10">
+                <Skeleton className="h-48 w-full rounded-t-xl" />
+                <CardHeader className="space-y-4">
+                  <Skeleton className="h-5 w-3/4 rounded-lg" />
+                  <Skeleton className="h-4 w-1/2 rounded-lg" />
                 </CardHeader>
-                <CardContent>
-                  <Skeleton className="h-4 w-full mb-2" />
-                  <Skeleton className="h-4 w-2/3" />
+                <CardContent className="space-y-3">
+                  <Skeleton className="h-4 w-full rounded-lg" />
+                  <Skeleton className="h-4 w-2/3 rounded-lg" />
                 </CardContent>
               </Card>
             ))}
           </div>
         ) : meals.length === 0 ? (
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader className="text-center pb-4">
-              <div className="mx-auto w-20 h-20 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center mb-4">
-                <Heart className="h-10 w-10 text-slate-400 dark:text-slate-500" />
+          <Card className="border border-border bg-muted/10">
+            <CardContent className="space-y-6 py-16 text-center">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl border border-border bg-muted text-3xl">
+                <Heart className="h-10 w-10 text-muted-foreground" />
               </div>
-              <CardTitle className="text-2xl">No favorites yet</CardTitle>
-              <CardDescription className="text-base mt-2">
-                Start exploring meals and save your favorites for easy access later.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center pb-6">
-              <Button asChild size="lg">
+              <div className="space-y-2">
+                <h3 className="text-2xl font-semibold text-foreground">
+                  No favorites yet
+                </h3>
+                <p className="mx-auto max-w-md text-base text-muted-foreground">
+                  Start exploring meals and save your favorites for easy access later.
+                </p>
+              </div>
+              <Button asChild size="lg" className="rounded-xl">
                 <Link href="/meals">Browse Meals</Link>
               </Button>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {meals.map((meal: any) => (
               <MealCard
                 key={meal.id}
