@@ -116,52 +116,55 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
   };
 
   return (
-    <Card className="border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+    <Card className="group relative border-0 shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm overflow-hidden transform hover:-translate-y-2">
       {/* Image */}
-      <div className="relative h-48 w-full overflow-hidden">
+      <div className="relative h-52 w-full overflow-hidden">
         {meal.imageUrl ? (
-          <Image
-            src={meal.imageUrl}
-            alt={meal.name}
-            fill
-            className="object-cover"
-          />
+          <>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <Image
+              src={meal.imageUrl}
+              alt={meal.name}
+              fill
+              className="object-cover transform group-hover:scale-110 transition-transform duration-500"
+            />
+          </>
         ) : (
-          <div className="h-full w-full bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center">
-            <div className="text-5xl">🍽️</div>
+          <div className="h-full w-full bg-gradient-to-br from-emerald-100 via-teal-100 to-cyan-100 dark:from-emerald-900/30 dark:via-teal-900/30 dark:to-cyan-900/30 flex items-center justify-center">
+            <div className="text-6xl transform group-hover:scale-110 transition-transform duration-300">🍽️</div>
           </div>
         )}
       </div>
 
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 relative z-10">
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="text-lg font-semibold line-clamp-2 flex-1">
+          <CardTitle className="text-xl font-bold line-clamp-2 flex-1 text-slate-900 dark:text-slate-50 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors duration-300">
             {meal.name}
           </CardTitle>
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 relative z-10">
         {/* Macros Row */}
-        <div className="flex items-center gap-4 text-sm border-b border-slate-100 dark:border-slate-800 pb-3">
-          <div className="flex-1 text-center">
-            <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Calories</div>
-            <div className="font-semibold">{meal.calories}</div>
+        <div className="flex items-center gap-3 text-sm border-b-2 border-slate-100 dark:border-slate-800 pb-4">
+          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30">
+            <div className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-1 uppercase tracking-wide">Calories</div>
+            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.calories}</div>
           </div>
-          <div className="w-px h-8 bg-slate-200 dark:bg-slate-800" />
-          <div className="flex-1 text-center">
-            <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Protein</div>
-            <div className="font-semibold">{meal.protein}g</div>
+          <div className="w-px h-10 bg-slate-200 dark:bg-slate-800" />
+          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30">
+            <div className="text-xs font-semibold text-violet-600 dark:text-violet-400 mb-1 uppercase tracking-wide">Protein</div>
+            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.protein}g</div>
           </div>
-          <div className="w-px h-8 bg-slate-200 dark:bg-slate-800" />
-          <div className="flex-1 text-center">
-            <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Carbs</div>
-            <div className="font-semibold">{meal.carbs}g</div>
+          <div className="w-px h-10 bg-slate-200 dark:bg-slate-800" />
+          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30">
+            <div className="text-xs font-semibold text-cyan-600 dark:text-cyan-400 mb-1 uppercase tracking-wide">Carbs</div>
+            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.carbs}g</div>
           </div>
-          <div className="w-px h-8 bg-slate-200 dark:bg-slate-800" />
-          <div className="flex-1 text-center">
-            <div className="text-xs text-slate-500 dark:text-slate-400 mb-1">Fat</div>
-            <div className="font-semibold">{meal.fat}g</div>
+          <div className="w-px h-10 bg-slate-200 dark:bg-slate-800" />
+          <div className="flex-1 text-center p-2 rounded-lg bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30">
+            <div className="text-xs font-semibold text-pink-600 dark:text-pink-400 mb-1 uppercase tracking-wide">Fat</div>
+            <div className="font-bold text-lg text-slate-900 dark:text-slate-50">{meal.fat}g</div>
           </div>
         </div>
 
@@ -195,11 +198,11 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
         )}
 
         {/* Actions */}
-        <div className="flex gap-2 pt-2">
+        <div className="flex gap-3 pt-2">
           <Button
             onClick={handleLogClick}
             disabled={logMealMutation.isPending || !isSignedIn}
-            className="flex-1"
+            className="flex-1 font-semibold shadow-md hover:shadow-lg"
             size="sm"
           >
             {logMealMutation.isPending ? (
@@ -216,10 +219,10 @@ export function MealCard({ meal, isFavorite: initialIsFavorite, onFavoriteChange
             disabled={favoriteMutation.isPending || !isSignedIn}
             variant={isFavorite ? "default" : "outline"}
             size="sm"
-            className="px-3"
+            className={`px-4 shadow-md hover:shadow-lg ${isFavorite ? "bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600" : ""}`}
           >
             <Heart
-              className={`h-4 w-4 ${isFavorite ? "fill-current" : ""}`}
+              className={`h-5 w-5 ${isFavorite ? "fill-current" : ""}`}
             />
           </Button>
         </div>
