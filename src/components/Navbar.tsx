@@ -75,6 +75,12 @@ const Navbar = () => {
                   Favorites
                 </Link>
                 <Link
+                  href="/schedule"
+                  className="px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 rounded-lg transition-all duration-200"
+                >
+                  Schedule
+                </Link>
+                <Link
                   href="/saved-meal-plans"
                   className="px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/20 rounded-lg transition-all duration-200"
                 >

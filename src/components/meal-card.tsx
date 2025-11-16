@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CalendarPlus, ChevronDown, ChevronUp, Heart, Plus } from "lucide-react";
+import { CalendarPlus, ChevronDown, ChevronUp, Heart } from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
@@ -88,39 +88,14 @@ export function MealCard({
     },
   });
 
-  const logMealMutation = useMutation({
-    mutationFn: async () => {
-      if (!isSignedIn) {
-        throw new Error("Please sign in to log meals");
-      }
-      const response = await fetch("/api/meal-logs", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mealId: meal.id }),
-      });
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to log meal");
-      }
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["dashboard-stats"] });
-      toast.success("Meal added to log");
-    },
-    onError: (error: Error) => {
-      toast.error(error.message || "Failed to log meal");
-    },
-  });
-
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     favoriteMutation.mutate();
   };
 
-  const handleLogClick = (e: React.MouseEvent) => {
+  const handleAddToFavoritesClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    logMealMutation.mutate();
+    favoriteMutation.mutate();
   };
 
   const handleAddToScheduleClick = (e: React.MouseEvent) => {
@@ -221,17 +196,18 @@ export function MealCard({
         {/* Actions */}
         <div className="flex gap-3 pt-2">
           <Button
-            onClick={handleLogClick}
-            disabled={logMealMutation.isPending || !isSignedIn}
+            onClick={handleAddToFavoritesClick}
+            disabled={favoriteMutation.isPending || !isSignedIn}
             className="flex-1 font-semibold shadow-md hover:shadow-lg"
             size="sm"
+            variant={isFavorite ? "default" : "outline"}
           >
-            {logMealMutation.isPending ? (
+            {favoriteMutation.isPending ? (
               "Adding..."
             ) : (
               <>
-                <Plus className="h-4 w-4 mr-1.5" />
-                Add to Log
+                <Heart className={`h-4 w-4 mr-1.5 ${isFavorite ? "fill-current" : ""}`} />
+                {isFavorite ? "Remove from Favorites" : "Add to Favorites"}
               </>
             )}
           </Button>

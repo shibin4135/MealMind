@@ -12,6 +12,7 @@ import { Loader2, Lock, AlertCircle, Sparkles, Save, RefreshCw, Calendar } from 
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { InputDialog } from "@/components/input-dialog";
+import { Separator } from "@/components/ui/separator";
 
 interface MealPlanProps {
   dietType: string;
