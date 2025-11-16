@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 import { Loader2, TrendingUp, UtensilsCrossed, Target, FileText, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -28,8 +29,8 @@ const Dashboard = () => {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-slate-400" />
+      <div className="min-h-screen bg-background flex items-center justify-center pt-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -47,24 +48,31 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
         {/* Header */}
-        <div className="mb-8 sm:mb-12">
-          <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
-              Dashboard
-            </span>
-          </h1>
-          <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-medium">
-            Track your daily nutrition and progress
-          </p>
-        </div>
+        <header className="space-y-4 text-center md:text-left">
+          <div className="inline-flex items-center rounded-full bg-muted/40 px-4 py-1 text-sm font-medium text-muted-foreground">
+            Dashboard
+          </div>
+          <div className="space-y-3">
+            <h1 className="text-3xl sm:text-4xl font-semibold">
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                Dashboard
+              </span>
+            </h1>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl">
+              Track your daily nutrition and progress
+            </p>
+          </div>
+        </header>
+
+        <Separator className="bg-border" />
 
         {isLoading ? (
           <div className="space-y-6 sm:space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-              <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+              <Card className="border border-border bg-muted/10">
                 <CardHeader>
                   <Skeleton className="h-5 w-32 mb-2" />
                   <Skeleton className="h-4 w-24" />
@@ -73,7 +81,7 @@ const Dashboard = () => {
                   <Skeleton className="h-8 w-16" />
                 </CardContent>
               </Card>
-              <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+              <Card className="border border-border bg-muted/10">
                 <CardHeader>
                   <Skeleton className="h-5 w-32 mb-2" />
                   <Skeleton className="h-4 w-24" />
@@ -84,7 +92,7 @@ const Dashboard = () => {
               </Card>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+              <Card className="border border-border bg-muted/10">
                 <CardHeader>
                   <Skeleton className="h-5 w-32 mb-2" />
                   <Skeleton className="h-4 w-24" />
@@ -94,7 +102,7 @@ const Dashboard = () => {
                   <Skeleton className="h-2 w-full" />
                 </CardContent>
               </Card>
-              <Card className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+              <Card className="border border-border bg-muted/10">
                 <CardHeader>
                   <Skeleton className="h-5 w-32 mb-2" />
                   <Skeleton className="h-4 w-24" />
@@ -109,13 +117,13 @@ const Dashboard = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                <Card key={i} className="border border-border bg-muted/10">
                   <CardHeader>
-                    <Skeleton className="h-5 w-24 mb-2" />
-                    <Skeleton className="h-4 w-20" />
+                    <Skeleton className="h-5 w-24 mb-2 rounded-lg" />
+                    <Skeleton className="h-4 w-20 rounded-lg" />
                   </CardHeader>
                   <CardContent>
-                    <Skeleton className="h-8 w-16" />
+                    <Skeleton className="h-8 w-16 rounded-lg" />
                   </CardContent>
                 </Card>
               ))}
@@ -195,7 +203,7 @@ const Dashboard = () => {
                       <span className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-amber-600 to-orange-600 dark:from-amber-400 dark:to-orange-400 bg-clip-text text-transparent">
                         {stats?.today?.calories || 0}
                       </span>
-                      <span className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+                      <span className="text-xs sm:text-sm text-muted-foreground font-medium">
                         / {dailyGoals.calories} cal
                       </span>
                     </div>
@@ -222,8 +230,8 @@ const Dashboard = () => {
                   <div className="space-y-4">
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-semibold">Protein</span>
-                        <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-50">
+                        <span className="text-xs sm:text-sm text-muted-foreground font-semibold">Protein</span>
+                        <span className="text-xs sm:text-sm font-bold text-foreground">
                           {stats?.today?.protein || 0}g / {dailyGoals.protein}g
                         </span>
                       </div>
@@ -234,8 +242,8 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-semibold">Carbs</span>
-                        <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-50">
+                        <span className="text-xs sm:text-sm text-muted-foreground font-semibold">Carbs</span>
+                        <span className="text-xs sm:text-sm font-bold text-foreground">
                           {stats?.today?.carbs || 0}g / {dailyGoals.carbs}g
                         </span>
                       </div>
@@ -246,8 +254,8 @@ const Dashboard = () => {
                     </div>
                     <div>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 font-semibold">Fat</span>
-                        <span className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-50">
+                        <span className="text-xs sm:text-sm text-muted-foreground font-semibold">Fat</span>
+                        <span className="text-xs sm:text-sm font-bold text-foreground">
                           {stats?.today?.fat || 0}g / {dailyGoals.fat}g
                         </span>
                       </div>

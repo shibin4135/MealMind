@@ -122,37 +122,30 @@ const MealPlanDetail = () => {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-foreground transition-colors duration-300">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground transition-colors duration-300 pt-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!isSignedIn) {
     return (
-      <div className="relative min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center px-4">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-70 dark:opacity-40"
-        >
-          <div className="absolute -top-32 left-0 h-72 w-72 rounded-full bg-gradient-to-br from-emerald-500/25 to-teal-500/25 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-gradient-to-br from-violet-500/20 to-purple-500/20 blur-3xl" />
-        </div>
-        <Card className="max-w-md w-full border-0 shadow-2xl bg-card/90 backdrop-blur">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center px-4 pt-20">
+        <Card className="max-w-md w-full border border-border bg-muted/10">
           <CardHeader className="text-center">
             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Lock className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold">Sign In Required</CardTitle>
+            <CardTitle className="text-2xl font-bold text-foreground">Sign In Required</CardTitle>
             <CardDescription className="mt-2 text-base text-muted-foreground">
               You need to be signed in to view this meal plan.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <Button asChild size="lg" className="font-semibold shadow-lg hover:shadow-xl">
+            <Button asChild size="lg" className="font-semibold rounded-xl">
               <Link href="/sign-up">Sign In</Link>
             </Button>
-            <Button asChild variant="outline" className="font-semibold">
+            <Button asChild variant="outline" className="font-semibold rounded-xl">
               <Link href="/">Back to Home</Link>
             </Button>
           </CardContent>
@@ -163,19 +156,12 @@ const MealPlanDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="relative min-h-screen bg-background text-foreground transition-colors duration-300">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-70 dark:opacity-40"
-        >
-          <div className="absolute -top-32 -left-24 h-[26rem] w-[26rem] rounded-full bg-gradient-to-br from-emerald-500/25 to-teal-500/25 blur-3xl" />
-          <div className="absolute top-1/2 -right-32 h-[24rem] w-[24rem] rounded-full bg-gradient-to-br from-indigo-500/20 to-sky-500/20 blur-3xl" />
-        </div>
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-8">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
           <Skeleton className="h-12 w-64 rounded-xl" />
           <div className="space-y-6">
             {[1, 2, 3, 4, 5, 6, 7].map((i) => (
-              <Card key={i} className="border-0 shadow-xl rounded-2xl bg-card/90 backdrop-blur">
+              <Card key={i} className="border border-border bg-muted/10">
                 <CardHeader className="pb-3">
                   <Skeleton className="h-6 w-40 rounded-lg" />
                 </CardHeader>
@@ -194,22 +180,22 @@ const MealPlanDetail = () => {
 
   if (!planData?.savedPlan) {
     return (
-      <div className="relative min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center px-4">
-        <Card className="max-w-lg w-full border-0 shadow-2xl bg-card/90 backdrop-blur">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center px-4 pt-20">
+        <Card className="max-w-lg w-full border border-border bg-muted/10">
           <CardHeader className="text-center space-y-4">
             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto shadow-xl">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold">Meal Plan Not Found</CardTitle>
+            <CardTitle className="text-2xl font-bold text-foreground">Meal Plan Not Found</CardTitle>
             <CardDescription className="text-base text-muted-foreground">
               The meal plan you're looking for doesn't exist or has been deleted. Try generating a new plan or return to your saved plans.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
-            <Button asChild className="font-semibold shadow-lg hover:shadow-xl">
+            <Button asChild className="font-semibold rounded-xl">
               <Link href="/mealplan">Generate Meal Plan</Link>
             </Button>
-            <Button asChild variant="outline" className="font-semibold">
+            <Button asChild variant="outline" className="font-semibold rounded-xl">
               <Link href="/saved-meal-plans">Back to Saved Plans</Link>
             </Button>
           </CardContent>
@@ -240,29 +226,20 @@ const MealPlanDetail = () => {
         isLoading={deleteMutation.isPending}
       />
 
-      <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-foreground transition-colors duration-300">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-70 dark:opacity-40"
-        >
-          <div className="absolute -top-40 -left-32 h-[30rem] w-[30rem] rounded-full bg-gradient-to-br from-emerald-500/30 to-teal-500/30 blur-3xl" />
-          <div className="absolute top-1/2 -right-40 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-violet-500/25 to-purple-500/25 blur-3xl" />
-          <div className="absolute -bottom-32 left-1/3 h-[32rem] w-[32rem] rounded-full bg-gradient-to-br from-cyan-500/25 to-blue-500/25 blur-3xl" />
-        </div>
-
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-10">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
           {/* Header */}
           <div className="space-y-6 text-center sm:text-left">
             <Button
               variant="ghost"
               onClick={() => router.push("/saved-meal-plans")}
-              className="w-fit sm:-ml-2 text-muted-foreground hover:text-foreground hover:bg-muted/50"
+              className="w-fit sm:-ml-2 text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-xl"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Saved Plans
             </Button>
 
-            <Card className="border-0 shadow-2xl rounded-2xl bg-card/90 backdrop-blur">
+            <Card className="border border-border bg-muted/10 rounded-xl">
               <CardContent className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 p-6 sm:p-8">
                 <div className="flex-1 space-y-4 text-left">
                   <div className="flex items-center gap-3">
@@ -315,7 +292,7 @@ const MealPlanDetail = () => {
                     onClick={handleToggleFavorite}
                     disabled={isTogglingFavorite || toggleFavoriteMutation.isPending}
                     variant={isFavorite ? "default" : "outline"}
-                    className="h-11 font-semibold shadow-lg hover:shadow-xl"
+                    className="h-11 font-semibold rounded-xl"
                   >
                     {isTogglingFavorite || toggleFavoriteMutation.isPending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -335,7 +312,7 @@ const MealPlanDetail = () => {
                     variant="ghost"
                     onClick={handleDelete}
                     disabled={deleteMutation.isPending}
-                    className="h-11 font-semibold shadow-lg hover:shadow-xl"
+                    className="h-11 font-semibold rounded-xl"
                   >
                     {deleteMutation.isPending ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -360,9 +337,9 @@ const MealPlanDetail = () => {
               return (
                 <Card
                   key={key}
-                  className="group relative border-0 shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl bg-card/90 backdrop-blur overflow-hidden"
+                  className="group relative border border-border bg-card/80 hover:shadow-lg transition-all duration-500 rounded-xl overflow-hidden"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                   <CardHeader className="relative z-10 pb-3">
                     <div className="flex items-center gap-3">
                       <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}>
@@ -372,22 +349,22 @@ const MealPlanDetail = () => {
                     </div>
                   </CardHeader>
                   <CardContent className="relative z-10 grid gap-4 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-border bg-background/70 backdrop-blur px-4 py-3 shadow-inner">
+                    <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
                       <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Breakfast</span>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{day.Breakfast}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-foreground">{day.Breakfast}</p>
                     </div>
-                    <div className="rounded-2xl border border-border bg-background/70 backdrop-blur px-4 py-3 shadow-inner">
+                    <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
                       <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Lunch</span>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{day.Lunch}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-foreground">{day.Lunch}</p>
                     </div>
-                    <div className="rounded-2xl border border-border bg-background/70 backdrop-blur px-4 py-3 shadow-inner">
+                    <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
                       <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Dinner</span>
-                      <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{day.Dinner}</p>
+                      <p className="mt-2 text-sm leading-relaxed text-foreground">{day.Dinner}</p>
                     </div>
                     {day.Snacks && (
-                      <div className="rounded-2xl border border-border bg-background/70 backdrop-blur px-4 py-3 shadow-inner">
+                      <div className="rounded-xl border border-border bg-muted/40 px-4 py-3">
                         <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Snacks</span>
-                        <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{day.Snacks}</p>
+                        <p className="mt-2 text-sm leading-relaxed text-foreground">{day.Snacks}</p>
                       </div>
                     )}
                   </CardContent>

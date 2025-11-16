@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Separator } from "@/components/ui/separator";
 import {
   Loader2,
   Lock,
@@ -131,34 +132,27 @@ const SavedMealPlans = () => {
 
   if (!isLoaded) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background text-foreground transition-colors duration-300">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      <div className="min-h-screen flex items-center justify-center bg-background text-foreground transition-colors duration-300 pt-20">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!isSignedIn) {
     return (
-      <div className="relative min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center px-4">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-60 dark:opacity-40"
-        >
-          <div className="absolute -top-32 -left-28 h-72 w-72 rounded-full bg-gradient-to-br from-emerald-500/30 to-teal-500/30 blur-3xl" />
-          <div className="absolute bottom-0 right-0 h-72 w-72 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20 blur-3xl" />
-        </div>
-        <Card className="max-w-md w-full border-0 shadow-xl bg-card/90 backdrop-blur">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 flex items-center justify-center px-4 pt-20">
+        <Card className="max-w-md w-full border border-border bg-muted/10">
           <CardHeader className="text-center">
             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Lock className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold">Please Sign In</CardTitle>
+            <CardTitle className="text-2xl font-bold text-foreground">Please Sign In</CardTitle>
             <CardDescription className="mt-2 text-base text-muted-foreground">
               You need to be signed in to view your saved meal plans.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button asChild className="w-full font-semibold">
+            <Button asChild className="w-full font-semibold rounded-xl">
               <Link href="/sign-up">Sign In</Link>
             </Button>
           </CardContent>
@@ -183,69 +177,71 @@ const SavedMealPlans = () => {
         isLoading={deleteMutation.isPending}
       />
 
-      <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-foreground transition-colors duration-300">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-70 dark:opacity-40"
-        >
-          <div className="absolute -top-40 -left-32 h-[28rem] w-[28rem] rounded-full bg-gradient-to-br from-emerald-500/30 to-teal-500/30 blur-3xl" />
-          <div className="absolute top-1/2 -right-40 h-[26rem] w-[26rem] rounded-full bg-gradient-to-br from-violet-500/25 to-purple-500/25 blur-3xl" />
-          <div className="absolute -bottom-32 left-1/3 h-[30rem] w-[30rem] rounded-full bg-gradient-to-br from-cyan-500/25 to-blue-500/25 blur-3xl" />
-        </div>
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+          <header className="space-y-4 text-center md:text-left">
+            <div className="inline-flex items-center rounded-full bg-muted/40 px-4 py-1 text-sm font-medium text-muted-foreground">
+              Saved Plans
+            </div>
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl font-semibold">
+                <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                  Saved Meal Plans
+                </span>
+              </h1>
+              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Revisit your AI-crafted meal plans, keep track of nutrition goals, and manage favorites effortlessly.
+              </p>
+            </div>
+          </header>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
-          <div className="mb-10 text-center">
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
-                Saved Meal Plans
-              </span>
-            </h1>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Revisit your AI-crafted meal plans, keep track of nutrition goals, and manage favorites effortlessly.
-            </p>
-          </div>
+          <Separator className="bg-border" />
 
-          <div className="relative max-w-xl mx-auto mb-12">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              placeholder="Search meal plans..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 pl-12 text-base border-2 border-input focus-visible:ring-0 focus:border-primary rounded-xl shadow-sm focus:shadow-lg transition-all duration-200 bg-card/80 backdrop-blur"
-            />
-          </div>
+          <Card className="border border-border bg-muted/10">
+            <CardContent className="py-6">
+              <div className="relative max-w-xl mx-auto">
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search meal plans..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-12 pl-12 text-base border border-border rounded-xl bg-background/90 transition-all duration-200 focus-visible:border-primary focus-visible:ring-0"
+                />
+              </div>
+            </CardContent>
+          </Card>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[1, 2, 3].map((i) => (
-                <Card key={i} className="border-0 shadow-lg rounded-2xl">
+                <Card key={i} className="border border-border bg-muted/10">
                   <CardContent className="p-6 space-y-4">
-                    <Skeleton className="h-6 w-3/4" />
-                    <Skeleton className="h-4 w-1/2" />
-                    <Skeleton className="h-10 w-full" />
+                    <Skeleton className="h-6 w-3/4 rounded-lg" />
+                    <Skeleton className="h-4 w-1/2 rounded-lg" />
+                    <Skeleton className="h-10 w-full rounded-lg" />
                   </CardContent>
                 </Card>
               ))}
             </div>
           ) : savedPlans.length === 0 ? (
-            <Card className="max-w-2xl mx-auto border-0 shadow-2xl bg-card/90 backdrop-blur rounded-2xl">
+            <Card className="border border-border bg-muted/10">
               <CardContent className="py-16 px-8 text-center space-y-6">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center mx-auto shadow-xl">
-                  <FileText className="h-10 w-10 text-white" />
+                <div className="w-20 h-20 rounded-2xl border border-border bg-muted flex items-center justify-center mx-auto">
+                  <FileText className="h-10 w-10 text-muted-foreground" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl font-bold mb-2">No Saved Meal Plans Yet</CardTitle>
-                  <CardDescription className="text-base text-muted-foreground max-w-md mx-auto">
+                  <h3 className="text-2xl font-semibold text-foreground mb-2">No Saved Meal Plans Yet</h3>
+                  <p className="text-base text-muted-foreground max-w-md mx-auto">
                     Generate your first plan to start building a personalized collection tailored to your goals.
-                  </CardDescription>
+                  </p>
                 </div>
-                <Button asChild size="lg" className="font-semibold shadow-lg hover:shadow-xl">
+                <Button asChild size="lg" className="rounded-xl">
                   <Link href="/mealplan">Generate a Meal Plan</Link>
                 </Button>
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {savedPlans.map((plan, index) => {
                 const { totalCalories, mealCount } = calculateNutrition(plan.mealPlan);
                 const createdDate = new Date(plan.createdAt).toLocaleDateString("en-US", {
@@ -258,7 +254,7 @@ const SavedMealPlans = () => {
                 return (
                   <Card
                     key={plan.id}
-                    className="group relative border-0 shadow-xl hover:shadow-2xl transition-all duration-500 rounded-2xl bg-card/90 backdrop-blur overflow-hidden"
+                    className="group relative border border-border bg-card/80 hover:shadow-lg transition-all duration-500 rounded-xl overflow-hidden"
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
                     <CardHeader className="relative z-10 pb-4">
@@ -279,7 +275,7 @@ const SavedMealPlans = () => {
                     </CardHeader>
 
                     <CardContent className="relative z-10 space-y-5">
-                      <div className="rounded-xl border border-border bg-background/60 backdrop-blur-sm px-4 py-3 text-sm text-muted-foreground shadow-inner">
+                      <div className="rounded-xl border border-border bg-muted/40 px-4 py-3 text-sm">
                         <div className="flex items-center justify-between">
                           <span className="font-semibold text-foreground">{mealCount} meals logged</span>
                           <span>{totalCalories} total cal</span>
@@ -313,7 +309,7 @@ const SavedMealPlans = () => {
                         <Button
                           asChild
                           variant="outline"
-                          className="flex-1 h-10 font-semibold shadow-sm hover:shadow-lg"
+                          className="flex-1 h-10 font-semibold rounded-lg"
                         >
                           <Link href={`/saved-meal-plans/${plan.id}`}>
                             <Eye className="h-4 w-4 mr-2" />
@@ -325,7 +321,7 @@ const SavedMealPlans = () => {
                           variant="ghost"
                           onClick={() => handleDelete(plan.id)}
                           disabled={deleteMutation.isPending}
-                          className="h-10 w-12 shadow-sm hover:shadow-lg"
+                          className="h-10 w-12 rounded-lg"
                           aria-label="Delete plan"
                         >
                           {deleteMutation.isPending && planToDelete === plan.id ? (

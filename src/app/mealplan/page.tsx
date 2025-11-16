@@ -202,30 +202,30 @@ const MealPlan = () => {
 
   if (!isLoaded || isLoadingSubscription) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center transition-colors duration-300">
-        <Loader2 className="h-8 w-8 animate-spin text-emerald-500 dark:text-emerald-400" />
+      <div className="min-h-screen bg-background flex items-center justify-center pt-20 transition-colors duration-300">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
 
   if (!isSignedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center px-4 transition-colors duration-300">
-        <Card className="max-w-md w-full border-0 shadow-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-4 pt-20 transition-colors duration-300">
+        <Card className="max-w-md w-full border border-border bg-muted/10">
           <CardHeader className="text-center">
             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Lock className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold text-slate-900 dark:text-slate-50">Sign In Required</CardTitle>
-            <CardDescription className="mt-2 text-base text-slate-600 dark:text-slate-300">
+            <CardTitle className="text-2xl font-bold text-foreground">Sign In Required</CardTitle>
+            <CardDescription className="mt-2 text-base text-muted-foreground">
               You need to be signed in to generate personalized meal plans.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button asChild className="w-full font-semibold">
+            <Button asChild className="w-full font-semibold rounded-xl">
               <Link href="/sign-up">Sign In</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full font-semibold">
+            <Button asChild variant="outline" className="w-full font-semibold rounded-xl">
               <Link href="/">Go to Home</Link>
             </Button>
           </CardContent>
@@ -236,22 +236,22 @@ const MealPlan = () => {
 
   if (!subscriptionData?.isSubscribed) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center px-4 transition-colors duration-300">
-        <Card className="max-w-md w-full border-0 shadow-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-4 pt-20 transition-colors duration-300">
+        <Card className="max-w-md w-full border border-border bg-muted/10">
           <CardHeader className="text-center">
             <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-violet-500 to-purple-500 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold text-slate-900 dark:text-slate-50">Subscription Required</CardTitle>
-            <CardDescription className="mt-2 text-base text-slate-600 dark:text-slate-300">
+            <CardTitle className="text-2xl font-bold text-foreground">Subscription Required</CardTitle>
+            <CardDescription className="mt-2 text-base text-muted-foreground">
               You need an active subscription to generate AI-powered meal plans.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Button asChild className="w-full font-semibold">
+            <Button asChild className="w-full font-semibold rounded-xl">
               <Link href="/subscribe">View Plans</Link>
             </Button>
-            <Button asChild variant="outline" className="w-full font-semibold">
+            <Button asChild variant="outline" className="w-full font-semibold rounded-xl">
               <Link href="/">Go to Home</Link>
             </Button>
           </CardContent>
@@ -274,39 +274,46 @@ const MealPlan = () => {
         isLoading={isSaving}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-teal-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 transition-colors duration-300">
-        <div className="max-w-7xl mx-auto">
+      <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
           {/* Header */}
-          <div className="mb-8 sm:mb-12 text-center">
-            <h1 className="text-4xl sm:text-5xl font-extrabold mb-3">
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
-                Generate Meal Plan
-              </span>
-            </h1>
-            <p className="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-medium max-w-2xl mx-auto">
-              Create your personalized weekly meal plan with AI-powered recommendations
-            </p>
-          </div>
+          <header className="space-y-4 text-center">
+            <div className="inline-flex items-center rounded-full bg-muted/40 px-4 py-1 text-sm font-medium text-muted-foreground">
+              Generate
+            </div>
+            <div className="space-y-3">
+              <h1 className="text-3xl sm:text-4xl font-semibold">
+                <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                  Generate Meal Plan
+                </span>
+              </h1>
+              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Create your personalized weekly meal plan with AI-powered recommendations
+              </p>
+            </div>
+          </header>
+
+          <Separator className="bg-border" />
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             {/* Form */}
             <div className="lg:col-span-1">
-              <Card className="border-0 shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+              <Card className="border border-border bg-muted/10 hover:shadow-lg transition-all duration-500">
                 <CardHeader>
-                  <CardTitle className="text-xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-2">
+                  <CardTitle className="text-xl font-bold text-foreground flex items-center gap-2">
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center shadow-lg">
                       <Sparkles className="h-5 w-5 text-white" />
                     </div>
                     Preferences
                   </CardTitle>
-                  <CardDescription className="text-sm text-slate-600 dark:text-slate-300">
+                  <CardDescription className="text-sm text-muted-foreground">
                     Tell us about your dietary needs
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form ref={formRef} onSubmit={handleSubmit} className="space-y-5">
                     <div className="space-y-2">
-                      <Label htmlFor="dietType" className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                      <Label htmlFor="dietType" className="text-sm font-semibold text-foreground">
                         Diet Type <span className="text-red-500">*</span>
                       </Label>
                       <Input
@@ -314,12 +321,12 @@ const MealPlan = () => {
                         name="dietType"
                         placeholder="e.g. vegetarian, vegan, keto"
                         required
-                        className="h-11 text-base border-2 border-slate-200 dark:border-slate-800 focus:border-emerald-500 dark:focus:border-emerald-400 rounded-xl shadow-sm focus:shadow-md transition-all duration-200 bg-white dark:bg-slate-900"
+                        className="h-11 text-base border border-border rounded-xl bg-background transition-all duration-200 focus-visible:border-primary focus-visible:ring-0"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="calories" className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                      <Label htmlFor="calories" className="text-sm font-semibold text-foreground">
                         Daily Calories <span className="text-red-500">*</span>
                       </Label>
                       <Input
@@ -330,31 +337,31 @@ const MealPlan = () => {
                         required
                         min="1000"
                         max="5000"
-                        className="h-11 text-base border-2 border-slate-200 dark:border-slate-800 focus:border-emerald-500 dark:focus:border-emerald-400 rounded-xl shadow-sm focus:shadow-md transition-all duration-200 bg-white dark:bg-slate-900"
+                        className="h-11 text-base border border-border rounded-xl bg-background transition-all duration-200 focus-visible:border-primary focus-visible:ring-0"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="cuisines" className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                      <Label htmlFor="cuisines" className="text-sm font-semibold text-foreground">
                         Preferred Cuisines
                       </Label>
                       <Input
                         id="cuisines"
                         name="cuisines"
                         placeholder="e.g. Italian, Indian, Mexican"
-                        className="h-11 text-base border-2 border-slate-200 dark:border-slate-800 focus:border-emerald-500 dark:focus:border-emerald-400 rounded-xl shadow-sm focus:shadow-md transition-all duration-200 bg-white dark:bg-slate-900"
+                        className="h-11 text-base border border-border rounded-xl bg-background transition-all duration-200 focus-visible:border-primary focus-visible:ring-0"
                       />
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="allergies" className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                      <Label htmlFor="allergies" className="text-sm font-semibold text-foreground">
                         Allergies / Exclusions
                       </Label>
                       <Input
                         id="allergies"
                         name="allergies"
                         placeholder="e.g. peanuts, gluten, dairy"
-                        className="h-11 text-base border-2 border-slate-200 dark:border-slate-800 focus:border-emerald-500 dark:focus:border-emerald-400 rounded-xl shadow-sm focus:shadow-md transition-all duration-200 bg-white dark:bg-slate-900"
+                        className="h-11 text-base border border-border rounded-xl bg-background transition-all duration-200 focus-visible:border-primary focus-visible:ring-0"
                       />
                     </div>
 
@@ -363,9 +370,9 @@ const MealPlan = () => {
                         type="checkbox"
                         id="snacks"
                         name="snacks"
-                        className="h-4 w-4 rounded border-2 border-slate-300 dark:border-slate-700 text-emerald-500 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors duration-200"
+                        className="h-4 w-4 rounded border-2 border-border text-primary focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-colors duration-200"
                       />
-                      <Label htmlFor="snacks" className="text-sm font-medium text-slate-700 dark:text-slate-300 cursor-pointer">
+                      <Label htmlFor="snacks" className="text-sm font-medium text-muted-foreground cursor-pointer">
                         Include snacks
                       </Label>
                     </div>
@@ -399,8 +406,8 @@ const MealPlan = () => {
                   <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center mb-6 shadow-xl">
                     <Sparkles className="h-10 w-10 text-white" />
                   </div>
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">Ready to get started?</h3>
-                  <p className="text-base text-slate-600 dark:text-slate-300 max-w-md">
+                  <h3 className="text-xl font-bold text-foreground mb-2">Ready to get started?</h3>
+                  <p className="text-base text-muted-foreground max-w-md">
                     Fill out the form to generate your personalized weekly meal plan.
                   </p>
                 </div>
@@ -408,25 +415,25 @@ const MealPlan = () => {
 
               {isPending && (
                 <div className="flex flex-col items-center justify-center h-96">
-                  <Loader2 className="h-12 w-12 animate-spin text-emerald-500 dark:text-emerald-400 mb-4" />
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">Generating your meal plan...</h3>
-                  <p className="text-base text-slate-600 dark:text-slate-300">This may take a few moments</p>
+                  <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
+                  <h3 className="text-xl font-bold text-foreground mb-2">Generating your meal plan...</h3>
+                  <p className="text-base text-muted-foreground">This may take a few moments</p>
                 </div>
               )}
 
               {error && (
-                <Card className="border-0 shadow-xl bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
+                <Card className="border border-border bg-muted/10">
                   <CardContent className="flex flex-col items-center justify-center py-16 text-center">
                     <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-red-500 to-rose-500 flex items-center justify-center mb-4 shadow-lg">
                       <AlertCircle className="h-8 w-8 text-white" />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+                    <h3 className="text-xl font-bold text-foreground mb-2">
                       {error.code === "RATE_LIMIT_EXCEEDED" ? "Service Busy" : "Something went wrong"}
                     </h3>
-                    <p className="text-base text-slate-600 dark:text-slate-300 mb-6 max-w-md">
+                    <p className="text-base text-muted-foreground mb-6 max-w-md">
                       {error.message || "Please try again in a few moments."}
                     </p>
-                    <Button onClick={() => window.location.reload()} variant="outline" className="font-semibold">
+                    <Button onClick={() => window.location.reload()} variant="outline" className="font-semibold rounded-xl">
                       Try Again
                     </Button>
                   </CardContent>
@@ -436,7 +443,7 @@ const MealPlan = () => {
               {data?.mealPlan && (
                 <div className="space-y-8">
                   {/* Success Header */}
-                  <div className="text-center pb-8 border-b-2 border-slate-200 dark:border-slate-800">
+                  <div className="text-center pb-8 border-b border-border">
                     <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center mx-auto mb-4 shadow-xl">
                       <Calendar className="h-8 w-8 text-white" />
                     </div>
@@ -446,7 +453,7 @@ const MealPlan = () => {
                       </span>
                       <span className="ml-2">🎉</span>
                     </h2>
-                    <p className="text-base text-slate-600 dark:text-slate-300 font-medium">
+                    <p className="text-base text-muted-foreground font-medium">
                       Your personalized meal plan has been generated successfully
                     </p>
                   </div>
@@ -456,7 +463,7 @@ const MealPlan = () => {
                     <Button
                       onClick={handleSavePlan}
                       disabled={isSaving}
-                      className="flex-1 h-11 font-semibold shadow-lg hover:shadow-xl"
+                      className="flex-1 h-11 font-semibold rounded-xl"
                     >
                       {isSaving ? (
                         <>
@@ -474,7 +481,7 @@ const MealPlan = () => {
                       onClick={handleRegenerate}
                       disabled={isPending}
                       variant="outline"
-                      className="flex-1 h-11 font-semibold shadow-md hover:shadow-lg"
+                      className="flex-1 h-11 font-semibold rounded-xl"
                     >
                       <RefreshCw className="mr-2 h-4 w-4" />
                       Regenerate
@@ -499,11 +506,11 @@ const MealPlan = () => {
                       return (
                         <Card 
                           key={key} 
-                          className="group relative border-0 shadow-xl hover:shadow-2xl transition-all duration-500 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm overflow-hidden transform hover:-translate-y-1"
+                          className="group relative border border-border bg-card/80 hover:shadow-lg transition-all duration-500 overflow-hidden"
                         >
                           <div className={`absolute inset-0 bg-gradient-to-br ${gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                           <CardHeader className="pb-3 relative z-10">
-                            <CardTitle className="text-xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-3">
+                            <CardTitle className="text-xl font-bold text-foreground flex items-center gap-3">
                               <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${gradient} flex items-center justify-center shadow-lg`}>
                                 <span className="text-white font-bold text-sm">{index + 1}</span>
                               </div>
@@ -511,22 +518,22 @@ const MealPlan = () => {
                             </CardTitle>
                           </CardHeader>
                           <CardContent className="space-y-5 relative z-10">
-                            <div className="p-4 rounded-xl bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border border-amber-200/50 dark:border-amber-800/50">
-                              <span className="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2 block">Breakfast</span>
-                              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">{day.Breakfast}</p>
+                            <div className="p-4 rounded-xl bg-muted/40 border border-border">
+                              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block">Breakfast</span>
+                              <p className="text-sm text-foreground leading-relaxed font-medium">{day.Breakfast}</p>
                             </div>
-                            <div className="p-4 rounded-xl bg-gradient-to-br from-violet-50 to-purple-50 dark:from-violet-950/30 dark:to-purple-950/30 border border-violet-200/50 dark:border-violet-800/50">
-                              <span className="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-2 block">Lunch</span>
-                              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">{day.Lunch}</p>
+                            <div className="p-4 rounded-xl bg-muted/40 border border-border">
+                              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block">Lunch</span>
+                              <p className="text-sm text-foreground leading-relaxed font-medium">{day.Lunch}</p>
                             </div>
-                            <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/30 dark:to-blue-950/30 border border-cyan-200/50 dark:border-cyan-800/50">
-                              <span className="text-xs font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-wider mb-2 block">Dinner</span>
-                              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">{day.Dinner}</p>
+                            <div className="p-4 rounded-xl bg-muted/40 border border-border">
+                              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block">Dinner</span>
+                              <p className="text-sm text-foreground leading-relaxed font-medium">{day.Dinner}</p>
                             </div>
                             {day.Snacks && (
-                              <div className="p-4 rounded-xl bg-gradient-to-br from-pink-50 to-rose-50 dark:from-pink-950/30 dark:to-rose-950/30 border border-pink-200/50 dark:border-pink-800/50">
-                                <span className="text-xs font-bold text-pink-600 dark:text-pink-400 uppercase tracking-wider mb-2 block">Snacks</span>
-                                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-medium">{day.Snacks}</p>
+                              <div className="p-4 rounded-xl bg-muted/40 border border-border">
+                                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2 block">Snacks</span>
+                                <p className="text-sm text-foreground leading-relaxed font-medium">{day.Snacks}</p>
                               </div>
                             )}
                           </CardContent>

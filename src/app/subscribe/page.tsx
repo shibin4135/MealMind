@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import { Check } from "lucide-react";
 
 type SubscribeResponse = {
@@ -51,49 +52,58 @@ const Subscribe = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 py-20 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50 mb-4">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300 pt-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+        <header className="space-y-4 text-center">
+          <div className="inline-flex items-center rounded-full bg-muted/40 px-4 py-1 text-sm font-medium text-muted-foreground">
             Pricing
-          </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Choose the plan that works best for you. All plans include unlimited AI meal plans.
-          </p>
-        </div>
+          </div>
+          <div className="space-y-3">
+            <h1 className="text-3xl sm:text-4xl font-semibold">
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 dark:from-emerald-400 dark:via-teal-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                Pricing
+              </span>
+            </h1>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Choose the plan that works best for you. All plans include unlimited AI meal plans.
+            </p>
+          </div>
+        </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <Separator className="bg-border" />
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {MealPlans.map((plan) => (
             <Card
               key={plan.amount}
-              className={`relative border-slate-200 dark:border-slate-800 ${plan.isPopular ? "border-2 border-slate-900 dark:border-slate-50 shadow-lg" : ""}`}
+              className={`relative border border-border bg-muted/10 ${plan.isPopular ? "border-2 border-primary shadow-lg" : ""}`}
             >
               {plan.isPopular && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-slate-900 dark:bg-slate-50 text-white dark:text-slate-900">Most Popular</Badge>
+                  <Badge className="bg-primary text-primary-foreground">Most Popular</Badge>
                 </div>
               )}
               <CardHeader>
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <CardTitle className="text-2xl text-foreground">{plan.name}</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold text-slate-900 dark:text-slate-50">${plan.amount}</span>
-                  <span className="text-slate-600 dark:text-slate-400 ml-2">/{plan.interval}</span>
+                  <span className="text-4xl font-bold text-foreground">${plan.amount}</span>
+                  <span className="text-muted-foreground ml-2">/{plan.interval}</span>
                 </div>
-                <CardDescription className="mt-4">{plan.description}</CardDescription>
+                <CardDescription className="mt-4 text-muted-foreground">{plan.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-slate-900 dark:text-slate-50 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-slate-600 dark:text-slate-400">{feature}</span>
+                      <Check className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-muted-foreground">{feature}</span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
               <CardFooter>
                 <Button
-                  className="w-full"
+                  className="w-full rounded-xl"
                   variant={plan.isPopular ? "default" : "outline"}
                   onClick={() => handleSubscribe(plan.interval)}
                   disabled={isPending}
